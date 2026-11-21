@@ -1,0 +1,4 @@
+Horizon,Validation_MAE,Validation_RMSE,Validation_R2,Test_MAE,Test_RMSE,Test_R2,Test_High_Case_MAE,Test_High_Case_Count
+2 weeks,1.1338,2.511,0.723,1.5362,2.9087,0.5303,4.2409,447
+3 weeks,1.3025,3.0447,0.5927,1.6347,3.0985,0.467,5.1352,447
+4 weeks,1.2346,2.809,0.6533,1.5714,2.973,0.5093,4.6229,447

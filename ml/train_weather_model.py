@@ -13,7 +13,7 @@ from sklearn.metrics import (
 
 from ml.weather_features import (
     create_weather_features,
-    get_weather_features
+    get_all_features
 )
 
 
@@ -36,14 +36,17 @@ os.makedirs("data/processed", exist_ok=True)
 
 print("Loading dataset...")
 
-df = pd.read_csv("data/processed/cleaned_dengue.csv")
+df = pd.read_csv(
+    "data/processed/cleaned_dengue.csv"
+)
 
 featured_df = create_weather_features(df)
 
-FEATURES = get_weather_features()
+FEATURES = get_all_features()
 
 print("Dataset loaded:", featured_df.shape)
-print("Number of weather features:", len(FEATURES))
+print("Total features:", len(FEATURES))
+print("Features:", FEATURES)
 
 
 # ==========================================
@@ -64,17 +67,21 @@ def create_model():
 
 
 # ==========================================
-# 4. METRICS
+# 4. MODEL EVALUATION
 # ==========================================
 
 def evaluate_model(actual, predicted):
 
     actual = np.asarray(actual)
-    predicted = np.asarray(predicted)
+    predicted = np.maximum(
+        np.asarray(predicted),
+        0
+    )
 
-    predicted = np.maximum(predicted, 0)
-
-    mae = mean_absolute_error(actual, predicted)
+    mae = mean_absolute_error(
+        actual,
+        predicted
+    )
 
     rmse = np.sqrt(
         mean_squared_error(actual, predicted)
@@ -104,7 +111,7 @@ def evaluate_model(actual, predicted):
 
 
 # ==========================================
-# 5. TRAIN THREE HORIZON MODELS
+# 5. TRAIN THREE MODELS
 # ==========================================
 
 all_results = []
@@ -119,16 +126,18 @@ for horizon in [2, 3, 4]:
     target_col = f"target_{horizon}w"
     target_date_col = f"target_date_{horizon}w"
 
-    # Prepare horizon-specific dataset
     model_df = featured_df.dropna(
-        subset=FEATURES + [target_col, target_date_col]
+        subset=FEATURES + [
+            target_col,
+            target_date_col
+        ]
     ).copy()
 
     model_df[target_date_col] = pd.to_datetime(
         model_df[target_date_col]
     )
 
-    # Chronological split using target date
+    # Chronological split
     train_df = model_df[
         model_df[target_date_col] <= TRAIN_END
     ].copy()
@@ -146,9 +155,13 @@ for horizon in [2, 3, 4]:
     print("Validation rows:", len(validation_df))
     print("Test rows:", len(test_df))
 
-    if len(train_df) == 0 or len(validation_df) == 0 or len(test_df) == 0:
+    if (
+        train_df.empty
+        or validation_df.empty
+        or test_df.empty
+    ):
         raise ValueError(
-            f"Empty dataset split for {horizon}-week horizon."
+            f"Empty dataset split for {horizon}-week model."
         )
 
     # Features and targets
@@ -161,14 +174,14 @@ for horizon in [2, 3, 4]:
     X_test = test_df[FEATURES]
     y_test = test_df[target_col]
 
-    # Train model
+    # Train
     model = create_model()
 
-    print("Fitting Poisson HistGradientBoosting model...")
+    print("Training model...")
 
     model.fit(X_train, y_train)
 
-    # Validation prediction
+    # Validation
     val_predictions = model.predict(X_val)
 
     validation_metrics = evaluate_model(
@@ -176,7 +189,7 @@ for horizon in [2, 3, 4]:
         val_predictions
     )
 
-    # Final test prediction
+    # Test
     test_predictions = model.predict(X_test)
 
     test_metrics = evaluate_model(
@@ -184,15 +197,17 @@ for horizon in [2, 3, 4]:
         test_predictions
     )
 
-    # Training target quantiles for later risk tiers
+    # Risk cutoffs
     risk_cutoffs = {
         "p50": float(y_train.quantile(0.50)),
         "p75": float(y_train.quantile(0.75)),
         "p90": float(y_train.quantile(0.90))
     }
 
-    # Save model and metadata
-    model_path = f"models/weather_model_{horizon}w.joblib"
+    # Save model package
+    model_path = (
+        f"models/weather_model_{horizon}w.joblib"
+    )
 
     model_package = {
         "model": model,
@@ -202,37 +217,38 @@ for horizon in [2, 3, 4]:
         "high_case_threshold": HIGH_CASE_THRESHOLD
     }
 
-    joblib.dump(model_package, model_path)
+    joblib.dump(
+        model_package,
+        model_path
+    )
 
     print("\nValidation metrics:", validation_metrics)
     print("Test metrics:", test_metrics)
     print("Risk cutoffs:", risk_cutoffs)
     print("Saved:", model_path)
 
-    # Save results
     all_results.append({
         "Horizon": f"{horizon} weeks",
-
         "Validation_MAE": validation_metrics["MAE"],
         "Validation_RMSE": validation_metrics["RMSE"],
         "Validation_R2": validation_metrics["R2_Score"],
-
         "Test_MAE": test_metrics["MAE"],
         "Test_RMSE": test_metrics["RMSE"],
         "Test_R2": test_metrics["R2_Score"],
-
         "Test_High_Case_MAE": test_metrics["High_Case_MAE"],
         "Test_High_Case_Count": test_metrics["High_Case_Count"]
     })
 
-    # Store test predictions
     prediction_df = pd.DataFrame({
         "ward_id": test_df["ward_id"].values,
         "forecast_origin": test_df["date"].values,
         "target_date": test_df[target_date_col].values,
         "weeks_ahead": horizon,
         "actual_cases": y_test.values,
-        "predicted_cases": np.maximum(test_predictions, 0)
+        "predicted_cases": np.maximum(
+            test_predictions,
+            0
+        )
     })
 
     all_predictions.append(prediction_df)
@@ -261,7 +277,7 @@ predictions_df.to_csv(
 
 
 # ==========================================
-# 7. FINAL MODEL COMPARISON
+# 7. FINAL COMPARISON
 # ==========================================
 
 print("\n" + "=" * 50)

@@ -1,12 +1,16 @@
 
-import pandas as pd
 import joblib
+import pandas as pd
+import numpy as np
 from pathlib import Path
 
-# Project directory
+
+# ==========================================
+# 1. PROJECT PATHS
+# ==========================================
+
 project_root = Path(__file__).resolve().parents[1]
 
-# File paths
 input_path = (
     project_root / "data" / "processed" /
     "api_weather_features.csv"
@@ -17,107 +21,295 @@ output_path = (
     "api_weather_forecasts.csv"
 )
 
-model_dir = project_root / "models"
+models_path = project_root / "models"
 
-print("Loading API weather features...")
+
+# ==========================================
+# 2. LOAD WARD FEATURES
+# ==========================================
+
+print("Loading ward-level API features...")
 
 df = pd.read_csv(input_path)
-forecast_origin = pd.to_datetime(df["date"].iloc[0])
 
-# Model input columns
-feature_columns = (
-    [f"rain_lag_{i}" for i in range(2, 9)]
-    + [
-        f"{variable}_lag_{lag}"
-        for variable in [
-            "avg_temp_c",
-            "min_temp_c",
-            "max_temp_c",
-            "relative_humidity_pct"
-        ]
-        for lag in [2, 3, 4]
-    ]
-    + [
-        "rain_sum_2w",
-        "rain_sum_4w",
-        "rain_sum_6w",
-        "week_sin",
-        "week_cos"
-    ]
-)
+df["date"] = pd.to_datetime(df["date"])
 
-X = df[feature_columns]
+if df.empty:
+    raise ValueError("No ward feature data found.")
 
-# Load trained models
-horizons = [2, 3, 4]
-results = []
+required_columns = [
+    "ward_id",
+    "city",
+    "date"
+]
 
-print("Generating predictions...")
+for column in required_columns:
 
-for horizon in horizons:
+    if column not in df.columns:
+        raise ValueError(
+            f"Required column missing: {column}"
+        )
 
-    model_path = (
-        model_dir / f"weather_model_{horizon}w.joblib"
+if df["ward_id"].duplicated().any():
+    raise ValueError("Duplicate ward IDs found.")
+
+if df.isnull().any().any():
+    raise ValueError(
+        "Missing values found in API feature data."
     )
 
-    # Load saved model package
-    model_data = joblib.load(model_path)
+print("Total wards:", df["ward_id"].nunique())
 
-    # Extract trained model and feature names
+print("\nWards per city:")
+print(df.groupby("city")["ward_id"].nunique())
+
+
+# ==========================================
+# 3. RISK CLASSIFICATION
+# ==========================================
+
+def classify_risk(predicted_cases):
+
+    if predicted_cases < 1:
+        return "Low"
+
+    elif predicted_cases < 5:
+        return "Medium"
+
+    elif predicted_cases < 10:
+        return "High"
+
+    else:
+        return "Critical"
+
+
+# ==========================================
+# 4. GENERATE PREDICTIONS
+# ==========================================
+
+all_predictions = []
+
+for horizon in [2, 3, 4]:
+
+    print("\n" + "=" * 50)
+    print(f"PREDICTING {horizon}-WEEK DENGUE RISK")
+    print("=" * 50)
+
+    model_file = (
+        models_path /
+        f"weather_model_{horizon}w.joblib"
+    )
+
+    if not model_file.exists():
+
+        raise FileNotFoundError(
+            f"Model not found: {model_file}"
+        )
+
+    # Load trained model package
+
+    model_data = joblib.load(model_file)
+
     model = model_data["model"]
-    model_features = model_data["features"]
+    features = model_data["features"]
 
-    # Check required features
+    # Validate model features
+
     missing_features = [
-        col for col in model_features
-        if col not in X.columns
+        feature for feature in features
+        if feature not in df.columns
     ]
 
     if missing_features:
+
         raise ValueError(
-            f"Missing features for {horizon}w model: "
-            f"{missing_features}"
+            f"Missing model features: {missing_features}"
         )
 
-    # Generate prediction
-    prediction = float(
-        model.predict(X[model_features])[0]
+    if len(features) != 27:
+
+        raise ValueError(
+            f"Expected 27 model features, "
+            f"but model requires {len(features)}."
+        )
+
+    # Prepare input for all wards
+
+    X = df[features].copy()
+
+    if X.isnull().any().any():
+
+        raise ValueError(
+            "Missing values found in prediction input."
+        )
+
+    # Predict dengue cases
+
+    predictions = model.predict(X)
+
+    predictions = np.maximum(
+        predictions,
+        0
     )
 
-    prediction = max(0, prediction)
+    # Prepare forecast dates
 
-    # Use saved risk cutoffs
-    risk_cutoffs = model_data["risk_cutoffs"]
+    forecast_origin = df["date"]
 
-    if prediction < 1:
-        risk = "Low"
-    elif prediction < 5:
-        risk = "Medium"
-    elif prediction < 10:
-        risk = "High"
-    else:
-        risk = "Critical"
-    # Calculate target date
-    target_date = (
-        forecast_origin + pd.Timedelta(weeks=horizon)
+    target_dates = (
+        forecast_origin
+        + pd.to_timedelta(horizon * 7, unit="D")
     )
 
-    results.append({
-        "forecast_origin": forecast_origin.date(),
-        "horizon_weeks": horizon,
-        "target_date": target_date.date(),
-        "predicted_cases": round(prediction, 2),
-        "risk_level": risk
+    # Create result for each ward
+
+    prediction_df = pd.DataFrame({
+
+        "ward_id": df["ward_id"],
+
+        "city": df["city"],
+
+        "forecast_origin": forecast_origin,
+
+        "target_date": target_dates,
+
+        "weeks_ahead": horizon,
+
+        "predicted_cases": np.round(
+            predictions,
+            2
+        ),
+
+        "risk_level": [
+            classify_risk(value)
+            for value in predictions
+        ]
+
     })
 
-# Create results DataFrame
-result_df = pd.DataFrame(results)
+    all_predictions.append(prediction_df)
 
-# Save predictions
-result_df.to_csv(output_path, index=False)
+    print("Model:", model_file.name)
+    print("Model features:", len(features))
+    print("Predicted wards:", len(prediction_df))
 
-print("\nAPI-based predictions completed!")
-print("\nForecast results:")
-print(result_df.to_string(index=False))
+    print("\nRisk distribution:")
 
-print("\nSaved at:", output_path)
+    print(
+        prediction_df["risk_level"]
+        .value_counts()
+        .to_string()
+    )
+
+
+# ==========================================
+# 5. COMBINE ALL PREDICTIONS
+# ==========================================
+
+final_df = pd.concat(
+    all_predictions,
+    ignore_index=True
+)
+
+final_df = final_df.sort_values(
+    ["city", "ward_id", "weeks_ahead"]
+).reset_index(drop=True)
+
+
+# ==========================================
+# 6. VALIDATE OUTPUT
+# ==========================================
+
+expected_rows = (
+    df["ward_id"].nunique() * 3
+)
+
+if len(final_df) != expected_rows:
+
+    raise ValueError(
+        f"Expected {expected_rows} predictions, "
+        f"but got {len(final_df)}."
+    )
+
+if final_df.duplicated(
+    subset=["ward_id", "weeks_ahead"]
+).any():
+
+    raise ValueError(
+        "Duplicate ward-horizon predictions found."
+    )
+
+# Validate city information
+
+if final_df["city"].isnull().any():
+
+    raise ValueError(
+        "Missing city information in predictions."
+    )
+
+# Validate forecast dates
+
+for horizon in [2, 3, 4]:
+
+    subset = final_df[
+        final_df["weeks_ahead"] == horizon
+    ]
+
+    expected_dates = (
+        subset["forecast_origin"]
+        + pd.to_timedelta(horizon * 7, unit="D")
+    )
+
+    if not (
+        subset["target_date"].reset_index(drop=True)
+        == expected_dates.reset_index(drop=True)
+    ).all():
+
+        raise ValueError(
+            f"Incorrect target dates for {horizon}-week forecast."
+        )
+
+
+# ==========================================
+# 7. SAVE FORECASTS
+# ==========================================
+
+final_df.to_csv(
+    output_path,
+    index=False
+)
+
+print("\n" + "=" * 50)
+print("PREDICTION COMPLETED SUCCESSFULLY!")
+print("=" * 50)
+
+print("Total wards:", df["ward_id"].nunique())
+print("Forecast horizons: 2, 3, 4 weeks")
+print("Total predictions:", len(final_df))
+
+print("\nPredictions per city:")
+print(final_df.groupby("city").size())
+
+print("\nForecast dates:")
+
+print(
+    final_df.groupby("weeks_ahead")["target_date"]
+    .first()
+)
+
+print("\nRisk distribution by horizon:")
+
+print(
+    final_df.groupby(
+        ["weeks_ahead", "risk_level"]
+    ).size().to_string()
+)
+
+print("\nPrediction preview:")
+
+print(
+    final_df.head(15).to_string(index=False)
+)
+
+print("\nSaved at:")
+print(output_path)
