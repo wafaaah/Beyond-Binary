@@ -1,0 +1,4 @@
+forecast_origin,horizon_weeks,target_date,predicted_cases,risk_level
+2026-11-09,2,2026-11-23,0.06,Low
+2026-11-09,3,2026-11-30,0.03,Low
+2026-11-09,4,2026-12-07,0.01,Low

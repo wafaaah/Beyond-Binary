@@ -1,0 +1,2 @@
+date,rain_lag_2,rain_lag_3,rain_lag_4,rain_lag_5,rain_lag_6,rain_lag_7,rain_lag_8,avg_temp_c_lag_2,avg_temp_c_lag_3,avg_temp_c_lag_4,min_temp_c_lag_2,min_temp_c_lag_3,min_temp_c_lag_4,max_temp_c_lag_2,max_temp_c_lag_3,max_temp_c_lag_4,relative_humidity_pct_lag_2,relative_humidity_pct_lag_3,relative_humidity_pct_lag_4,rain_sum_2w,rain_sum_4w,rain_sum_6w,week_sin,week_cos
+2026-11-09,7.5,0.6,9.3,6.9,61.5,18.7,34.6,29.56,29.37,28.89,25.63,25.8,25.5,33.89,32.84,32.43,70.0,67.0,74.29,8.099999999999993,24.3,104.5,-0.6631226582407955,0.7485107481711007
