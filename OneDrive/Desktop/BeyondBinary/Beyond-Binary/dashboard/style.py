@@ -1,104 +1,285 @@
+import streamlit as st
+
 
 def load_css():
+
     return """
     <style>
 
+    /* MAIN DASHBOARD BACKGROUND */
     .stApp {
-        background-color: #0B1120;
-        color: #E8EDF5;
+        background:
+            radial-gradient(
+                circle at 10% 10%,
+                rgba(190, 145, 205, 0.10),
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 90% 80%,
+                rgba(130, 110, 165, 0.12),
+                transparent 35%
+            ),
+            var(--background-color);
+
+        color: var(--text-color);
     }
+
+
+    /* --------------------------------
+       MAIN DASHBOARD BACKGROUND
+    -------------------------------- */
+
+    .stApp {
+        background:
+            radial-gradient(
+                circle at 10% 10%,
+                var(--glow-one),
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 90% 80%,
+                var(--glow-two),
+                transparent 35%
+            ),
+            var(--background-color);
+
+        color: var(--text-color);
+    }
+
+
+    /* --------------------------------
+       MAIN CONTENT AREA
+    -------------------------------- */
+
+    [data-testid="stAppViewContainer"] {
+        background: transparent;
+    }
+
+    [data-testid="stMain"] {
+        background: transparent;
+    }
+
+
+    /* --------------------------------
+       SIDEBAR GLASSMORPHISM
+    -------------------------------- */
 
     [data-testid="stSidebar"] {
-        background-color: #111A2C;
+        background: var(--glass-bg);
+        backdrop-filter: blur(18px);
+        border-right: 1px solid var(--glass-border);
     }
 
-    [data-testid="stSidebar"] * {
-        color: #E8EDF5;
+    [data-testid="stSidebar"] > div:first-child {
+        background: transparent;
     }
 
-    .block-container {
-        padding-top: 1.8rem;
-        padding-bottom: 2rem;
-        max-width: 1450px;
-    }
 
-    h1, h2, h3 {
-        color: #F3F6FC !important;
-    }
+    /* --------------------------------
+       METRIC CARDS
+    -------------------------------- */
 
-    p, label {
-        color: #A9B7CB;
-    }
-
-    div[data-testid="stMetric"] {
-        background-color: #141F33;
-        border: 1px solid #25334B;
+    [data-testid="stMetric"] {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
         padding: 18px;
-        border-radius: 14px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
     }
 
-    div[data-testid="stMetricLabel"] {
-        color: #9FB0C8;
+    [data-testid="stMetricValue"],
+    [data-testid="stMetricLabel"] {
+        color: var(--text-color);
     }
 
-    div[data-testid="stMetricValue"] {
-        color: #F3F6FC;
+
+    /* --------------------------------
+       TABS
+    -------------------------------- */
+
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+        background: transparent;
     }
 
-    div[data-testid="stMetricDelta"] {
-        font-size: 14px;
-    }
-
-    div[data-testid="stPlotlyChart"] {
-        background-color: #141F33;
-        border-radius: 14px;
-        padding: 8px;
-    }
-
-    div[data-testid="stDataFrame"] {
-        border: 1px solid #25334B;
-        border-radius: 12px;
-    }
-
-    .risk-box {
-        padding: 20px;
-        border-radius: 14px;
-        margin-bottom: 10px;
-    }
-
-    .risk-low {
-        background-color: #12352A;
-        border: 1px solid #26754B;
-    }
-
-    .risk-medium {
-        background-color: #3A3216;
-        border: 1px solid #A38327;
-    }
-
-    .risk-high {
-        background-color: #422718;
-        border: 1px solid #C16A26;
-    }
-
-    .risk-critical {
-        background-color: #421F29;
-        border: 1px solid #B64252;
-    }
-
-    .small-note {
-        color: #8FA2BC;
-        font-size: 13px;
-    }
-
-    .demo-banner {
-        background-color: #332A16;
-        border: 1px solid #8B7029;
-        padding: 12px 16px;
+    .stTabs [data-baseweb="tab"] {
+        color: var(--text-color);
         border-radius: 10px;
-        color: #F5D78A;
-        margin-bottom: 18px;
     }
+
+    .stTabs [aria-selected="true"] {
+        border-bottom-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+
+    /* --------------------------------
+       GLASS PANELS
+    -------------------------------- */
+
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        backdrop-filter: blur(18px);
+    }
+
+
+    /* --------------------------------
+       INPUTS AND SELECT BOXES
+    -------------------------------- */
+
+    [data-baseweb="select"] > div {
+        background: var(--glass-bg);
+        border-color: var(--glass-border);
+        border-radius: 10px;
+    }
+
+    [data-testid="stDateInput"] input {
+        background: var(--glass-bg);
+        color: var(--text-color);
+        border-color: var(--glass-border);
+    }
+
+
+    /* --------------------------------
+       BUTTONS
+    -------------------------------- */
+
+    .stButton > button {
+        border-radius: 10px;
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        color: var(--text-color);
+        transition: all 0.2s ease;
+    }
+
+    .stButton > button:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+
+    /* --------------------------------
+       DIVIDERS
+    -------------------------------- */
+
+    hr {
+        border-color: var(--border-color);
+    }
+
+
+    /* --------------------------------
+       HEADINGS AND TEXT
+    -------------------------------- */
+
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-color);
+    }
+
+    p, label, span {
+        color: inherit;
+    }
+
+    [data-testid="stCaptionContainer"] {
+        color: var(--muted-color);
+    }
+
+
+    /* --------------------------------
+       DASHBOARD SUBTITLE
+    -------------------------------- */
+
+    .dashboard-subtitle {
+        color: var(--muted-color);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        margin-top: -10px;
+        margin-bottom: 20px;
+    }
+
+
+    /* --------------------------------
+       DATAFRAME
+    -------------------------------- */
+
+    [data-testid="stDataFrame"] {
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+
+    /* --------------------------------
+       ALERTS AND NOTIFICATIONS
+    -------------------------------- */
+
+    [data-testid="stAlert"] {
+        border-radius: 12px;
+        backdrop-filter: blur(12px);
+    }
+
+
+    /* --------------------------------
+       RESPONSIVE DESIGN
+    -------------------------------- */
+
+    @media (max-width: 768px) {
+
+        [data-testid="stMetric"] {
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+    }
+
+
+    /* Clear readable text */
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-color) !important;
+    }
+
+    .stMarkdown p,
+    .stMarkdown li,
+    [data-testid="stMetricLabel"] {
+        color: var(--text-color);
+    }
+
+    [data-testid="stMetricValue"] {
+        color: var(--text-color);
+    }
+
+    [data-testid="stCaptionContainer"] {
+        color: var(--muted-color);
+    }
+
+    /* Card surfaces */
+    [data-testid="stMetric"] {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 18px;
+    }
+
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background: var(--glass-bg);
+        border-right: 1px solid var(--glass-border);
+    }
+
+    /* Buttons */
+    .stButton > button {
+        color: var(--text-color);
+        border-color: var(--glass-border);
+    }
+
 
     </style>
     """
