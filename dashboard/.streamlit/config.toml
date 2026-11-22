@@ -1,0 +1,46 @@
+# LIGHT THEME
+[theme.light]
+primaryColor = "#D17F70"
+backgroundColor = "#FBF3F0"
+secondaryBackgroundColor = "#F5E8E4"
+textColor = "#694343"
+borderColor = "#F0DED8"
+
+# DARK THEME — inspired by your reference image
+[theme.dark]
+primaryColor = "#E39A91"
+backgroundColor = "#21151B"
+secondaryBackgroundColor = "#8673b7"
+textColor = "#F2E4E5"
+borderColor = "#6b5d7f"
+
+
+showWidgetBorder = true
+
+chartCategoricalColors = [
+    "#C9A5D8",
+    "#D9A0C4",
+    "#A99BCB",
+    "#8FA9C9",
+    "#E0A7AD",
+    "#B5A9B9"
+]
+
+# DARK SIDEBAR
+[theme.dark.sidebar]
+primaryColor = "#9c7ea7"
+backgroundColor = "#09090D"
+secondaryBackgroundColor = "#d1aacc"
+textColor = "#F5F2F7"
+borderColor = "#9570cc"
+
+# LIGHT SIDEBAR
+[theme.light.sidebar]
+primaryColor = "#D17F70"
+backgroundColor = "#F5E8E4"
+secondaryBackgroundColor = "#FBF3F0"
+textColor = "#694343"
+borderColor = "#F0DED8"
+
+[server]
+runOnSave = true
