@@ -99,6 +99,46 @@ def load_css():
         color: #F5D78A;
         margin-bottom: 18px;
     }
+    /* Selectbox dark theme fix */
+    [data-testid="stSelectbox"] [data-baseweb="select"] {
+        background-color: #1B2940 !important;
+    }
+
+    [data-testid="stSelectbox"] [role="combobox"] {
+        background-color: #1B2940 !important;
+        color: #FFFFFF !important;
+        border: 1px solid #40536F !important;
+        border-radius: 8px !important;
+    }
+
+    [data-testid="stSelectbox"] [role="combobox"] * {
+        color: #FFFFFF !important;
+        background-color: transparent !important;
+    }
+
+    [data-testid="stSelectbox"] svg {
+        fill: #FFFFFF !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Dropdown menu options */
+    div[data-baseweb="popover"] ul {
+        background-color: #162238 !important;
+    }
+
+    div[data-baseweb="popover"] li {
+        color: #FFFFFF !important;
+        background-color: #162238 !important;
+    }
+
+    div[data-baseweb="popover"] li:hover {
+        background-color: #344B6B !important;
+    }
+    /* Dropdown arrow - white */
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] svg {
+        color: #FFFFFF !important;
+        fill: #FFFFFF !important;
+    }
 
     </style>
     """
