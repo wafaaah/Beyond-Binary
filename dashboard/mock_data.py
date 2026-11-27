@@ -238,32 +238,16 @@ def get_ward_profile(df):
 # ML FORECAST DATA
 # --------------------------------
 
-@st.cache_data
 def load_forecasts():
+    """2, 3 and 4 week replay forecasts for the shared scenario week."""
+    from shared import cached_forecast, default_week
 
-    forecast_path = (
-        BASE_DIR.parent
-        / "data"
-        / "processed"
-        / "api_weather_forecasts.csv"
-    )
-
-    if not forecast_path.exists():
-        raise FileNotFoundError(
-            f"Forecast CSV not found at: {forecast_path}"
-        )
-
-    forecast_df = pd.read_csv(forecast_path)
-
-    forecast_df["forecast_origin"] = pd.to_datetime(
-        forecast_df["forecast_origin"]
-    )
-
-    forecast_df["target_date"] = pd.to_datetime(
-        forecast_df["target_date"]
-    )
-
-    return forecast_df
+    week = st.session_state.get("week", default_week())
+    frames = [
+        cached_forecast(week, horizon).assign(weeks_ahead=horizon)
+        for horizon in (2, 3, 4)
+    ]
+    return pd.concat(frames, ignore_index=True)
 
 
 # --------------------------------
