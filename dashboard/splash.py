@@ -161,15 +161,21 @@ def _scene():
 
 
 CSS = """<style>
-.sp{position:fixed;inset:0;z-index:1000001;display:flex;align-items:center;justify-content:center;
+.sp{position:fixed;top:0;left:0;width:100vw;height:100vh;height:100dvh;z-index:1000001;display:flex;align-items:center;justify-content:center;
 pointer-events:none;background:radial-gradient(circle at 50% 42%,#3B2050 0,#170D21 65%);
 animation:sp-out .7s ease __DELAY__s forwards}
-.sp img{width:min(100vw,177vh);height:auto;max-height:100vh}
+.sp img{position:absolute;top:0;left:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:50% 75%}
+@media (max-aspect-ratio:3/2){.sp img{object-fit:contain}}
 .sp-bar{position:absolute;left:0;bottom:0;height:6px;width:0;
 background:linear-gradient(90deg,#F4B647,#F2762E);animation:sp-load __DELAY__s linear forwards}
 @keyframes sp-load{to{width:100%}}
 @keyframes sp-out{to{opacity:0;visibility:hidden}}
-@media (prefers-reduced-motion:reduce){.sp{display:none}}
+[data-testid="stSidebar"],[data-testid="stSidebarCollapsedControl"],[data-testid="stHeader"]{
+visibility:hidden;animation:sp-show 0s linear __DELAY__s forwards}
+@keyframes sp-show{to{visibility:visible}}
+@media (prefers-reduced-motion:reduce){.sp{display:none}
+[data-testid="stSidebar"],[data-testid="stSidebarCollapsedControl"],[data-testid="stHeader"]{
+visibility:visible;animation:none}}
 </style>""".replace("__DELAY__", str(SECONDS))
 
 

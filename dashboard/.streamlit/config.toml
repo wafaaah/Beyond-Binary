@@ -5,5 +5,9 @@ backgroundColor = "#170D21"
 secondaryBackgroundColor = "#2B1839"
 textColor = "#F6F0FA"
 
+[client]
+# the menu is drawn by nav.py, after the opening animation
+showSidebarNavigation = false
+
 [server]
 runOnSave = true

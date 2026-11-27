@@ -22,6 +22,7 @@ from style import load_css
 from dashboard_ui import render_briefing
 from role_gate import require_login
 from i18n import enable, is_bangla, t
+from nav import open_app
 
 from components import (
     render_data_notice,
@@ -358,6 +359,7 @@ st.set_page_config(
 # ============================================================
 
 st.markdown(load_css(), unsafe_allow_html=True)
+open_app()
 enable(in_sidebar=False)
 require_login()
 
