@@ -347,7 +347,7 @@ def render_seasonal_intelligence(
 
 st.set_page_config(
     page_title="DengueWatch | Beyond-Binary",
-    page_icon="🦟",
+    page_icon=str(Path(__file__).parent / "assets" / "logo.png"),
     layout="wide",
     initial_sidebar_state="expanded",
 )

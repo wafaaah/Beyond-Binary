@@ -14,7 +14,8 @@ from shared import (  # noqa: E402
     RISK_COLORS, apply_style, cached_forecast, default_week,
 )
 
-st.set_page_config(page_title="জনসাধারণের পরামর্শ", layout="wide")
+st.set_page_config(page_title="জনসাধারণের পরামর্শ", layout="wide",
+                   page_icon=str(DASHBOARD / "assets" / "logo.png"))
 apply_style(bangla_page=True)
 lang = st.session_state.get("lang", "en")
 

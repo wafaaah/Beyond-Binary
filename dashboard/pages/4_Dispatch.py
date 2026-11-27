@@ -23,7 +23,8 @@ from ml.dispatch import (  # noqa: E402
 
 STATUS = {"Pending": AMBER, "Acknowledged": OLIVE, "Needs support": ORANGE}
 
-st.set_page_config(page_title="Dispatch", layout="wide")
+st.set_page_config(page_title="Dispatch", layout="wide",
+                   page_icon=str(DASHBOARD / "assets" / "logo.png"))
 apply_style()
 week, horizon, stock, crews = scenario_controls()
 

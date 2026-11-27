@@ -21,7 +21,8 @@ from command_map import render_command_map  # noqa: E402
 from ml.allocation import allocate, city_summary  # noqa: E402
 from ml.routing import estimate_capacity, route_overflow  # noqa: E402
 
-st.set_page_config(page_title="Command Center", layout="wide")
+st.set_page_config(page_title="Command Center", layout="wide",
+                   page_icon=str(DASHBOARD / "assets" / "logo.png"))
 apply_style()
 week, horizon, stock, crews = scenario_controls()
 

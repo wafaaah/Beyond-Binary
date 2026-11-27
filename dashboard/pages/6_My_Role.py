@@ -31,7 +31,8 @@ ITEMS = [
     ("Spraying crews", "crews_required", "crews_allocated"),
 ]
 
-st.set_page_config(page_title="My Role", layout="wide")
+st.set_page_config(page_title="My Role", layout="wide",
+                   page_icon=str(DASHBOARD / "assets" / "logo.png"))
 apply_style()
 week, horizon, stock, crews = scenario_controls()
 result = allocate(cached_forecast(week, horizon), stock, crews)

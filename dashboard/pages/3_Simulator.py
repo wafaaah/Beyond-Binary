@@ -21,7 +21,8 @@ from ml.simulator import (  # noqa: E402
 
 GREY = "#8458A4"
 
-st.set_page_config(page_title="What-If Simulator", layout="wide")
+st.set_page_config(page_title="What-If Simulator", layout="wide",
+                   page_icon=str(DASHBOARD / "assets" / "logo.png"))
 apply_style()
 week, horizon, stock, crews = scenario_controls()
 
