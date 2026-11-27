@@ -156,6 +156,17 @@ def _install():
     st._dw_translated = True
 
 
+def _name_home_page():
+    """Show "Dashboard" in the sidebar for the main file, which is named app.py."""
+    label = "ড্যাশবোর্ড" if is_bangla() else "Dashboard"
+    st.markdown(
+        "<style>[data-testid='stSidebarNav'] li:first-child a span{font-size:0!important}"
+        "[data-testid='stSidebarNav'] li:first-child a span::after{"
+        f"content:'{label}';font-size:.9rem}}</style>",
+        unsafe_allow_html=True,
+    )
+
+
 def _changed():
     st.session_state["lang"] = st.session_state["lang_widget"]
 
@@ -167,5 +178,6 @@ def enable(in_sidebar=True, bangla_page=False):
     area = st.sidebar if in_sidebar else st
     area.radio("ভাষা / Language", list(LANGUAGES), key="lang_widget",
                format_func=LANGUAGES.get, horizontal=True, on_change=_changed)
+    _name_home_page()
     if is_bangla() or bangla_page:
         st.markdown(FONT_CSS, unsafe_allow_html=True)
