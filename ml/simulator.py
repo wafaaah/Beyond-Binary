@@ -1,83 +1,82 @@
-import sys
-from pathlib import Path
-
+"""What-if vector control simulator (model-driven counterfactual, offline)."""
+import joblib
+import numpy as np
 import pandas as pd
-import streamlit as st
 
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+from ml.allocation import FACTORS, MODEL_DIR, available_weeks
+from ml.weather_features import create_weather_features
 
-from ml.allocation import load_data, peak_week  # noqa: E402
-from ml.simulator import (  # noqa: E402
-    prepare, rank_roi, simulate, simulation_weeks,
-)
-
-st.set_page_config(page_title="What-If Simulator", layout="wide")
-st.title("What-If Vector Control Simulator")
+HORIZONS = (2, 3, 4)
+CREW_EFFECT = 0.25  # assumption: share of remaining ward risk fixed per crew
 
 
-@st.cache_data
-def cached_data():
-    return load_data()
+def simulation_weeks(data):
+    return sorted(set(available_weeks(data, 2)) & set(available_weeks(data, 4)))
 
 
-@st.cache_resource
-def cached_prepare(week):
-    return prepare(cached_data(), week)
+def apply_crews(rows, crews, effect=CREW_EFFECT):
+    """Lower water logging and raise sanitation according to crews per ward."""
+    out = rows.copy()
+    n = out.index.to_series().map(crews).fillna(0).astype(float)
+    remaining = (1 - effect) ** n
+    out["water_logging_risk_index"] = out["water_logging_risk_index"] * remaining
+    out["sanitation_score"] = 1 - (1 - out["sanitation_score"]) * remaining
+    return out
 
 
-data = cached_data()
-weeks = [pd.Timestamp(w).date() for w in simulation_weeks(data)]
-default = pd.Timestamp(peak_week(data)).date()
-week = st.sidebar.selectbox(
-    "Forecast origin week", weeks,
-    index=weeks.index(default) if default in weeks else len(weeks) - 1,
-)
-limit = st.sidebar.slider("Available crews", 1, 60, 20)
-effect = st.sidebar.slider("Assumed effect per crew (%)", 5, 50, 25, 5) / 100
+def prepare(data, origin_date):
+    """Features for one week plus the three local models."""
+    features = create_weather_features(data)
+    rows = features[features["date"] == pd.Timestamp(origin_date)]
+    rows = rows.set_index("ward_id")
+    models = {
+        h: joblib.load(MODEL_DIR / f"weather_model_{h}w.joblib")
+        for h in HORIZONS
+    }
+    return rows, models
 
-rows, models = cached_prepare(week)
-ranking = rank_roi(rows, models, 1, effect)
 
-st.subheader("Ward ROI ranking (1 crew each)")
-st.dataframe(ranking, hide_index=True, use_container_width=True)
+def simulate(rows, models, crews, effect=CREW_EFFECT):
+    """
+    Baseline vs intervention for 2, 3 and 4 weeks ahead.
 
-st.subheader("Deploy crews")
-top = ranking.loc[ranking["cases_prevented"] > 0, "ward_id"].head(5).tolist()
-selected = st.multiselect(
-    "Selected wards", sorted(rows.index), default=top[:min(5, limit)]
-)
-crews = {
-    ward: st.number_input(f"Crews for {ward}", 0, 5, 1, key=f"crew_{ward}")
-    for ward in selected
-}
-used = sum(crews.values())
+    crews: {ward_id: number of crews}. A scenario is never allowed to exceed
+    the baseline (small model irregularities are clipped to zero reduction).
+    """
+    changed = apply_crews(rows, crews, effect)
+    results = []
+    for horizon, package in models.items():
+        names = package["features"]
+        base = np.maximum(package["model"].predict(rows[names]), 0)
+        new = np.maximum(package["model"].predict(changed[names]), 0)
+        treated = rows.index.isin([w for w, n in crews.items() if n > 0])
+        new = np.where(treated, np.minimum(new, base), base)
+        frame = pd.DataFrame({
+            "ward_id": rows.index,
+            "city": rows["city"].values,
+            "weeks_ahead": horizon,
+            "crews": [crews.get(w, 0) for w in rows.index],
+            "baseline_cases": base,
+            "scenario_cases": new,
+        })
+        frame["cases_prevented"] = base - new
+        for item in ("hospital_beds", "saline_bags"):
+            frame[f"{item}_saved"] = frame["cases_prevented"] * FACTORS[item]
+        results.append(frame)
+    return pd.concat(results, ignore_index=True)
 
-if used > limit:
-    st.error(f"{used} crews selected but only {limit} available.")
-elif used == 0:
-    st.info("Select wards and assign at least one crew.")
-else:
-    result = simulate(rows, models, crews, effect)
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Crews used", f"{used} / {limit}")
-    c2.metric("Cases prevented", f"{result['cases_prevented'].sum():.1f}")
-    c3.metric("Bed load reduced", f"{result['hospital_beds_saved'].sum():.1f}")
-    c4.metric("Saline bags saved", f"{result['saline_bags_saved'].sum():.1f}")
 
-    weekly = result.groupby("weeks_ahead")[
-        ["baseline_cases", "scenario_cases"]].sum()
-    weekly.index = [f"Week +{i}" for i in weekly.index]
-    st.subheader("All wards: projected cases, weeks 2 to 4")
-    st.line_chart(weekly)
-    detail = result[result["crews"] > 0].round(2)
-    st.dataframe(detail, hide_index=True, use_container_width=True)
-    st.download_button("Download scenario CSV", detail.to_csv(index=False),
-                       "scenario.csv", "text/csv")
-
-st.warning(
-    "Assumption: each crew fixes a share of the remaining water logging and "
-    "sanitation gap. The model is then re-run. This shows model sensitivity, "
-    "not a proven real-world effect."
-)
+def rank_roi(rows, models, crews_per_ward=1, effect=CREW_EFFECT):
+    """Rank wards by cases prevented (weeks 2-4 combined) per crew."""
+    plan = {ward: crews_per_ward for ward in rows.index}
+    result = simulate(rows, models, plan, effect)
+    ranking = result.groupby(["ward_id", "city"], as_index=False)[
+        ["baseline_cases", "scenario_cases", "cases_prevented",
+         "hospital_beds_saved", "saline_bags_saved"]
+    ].sum()
+    ranking["roi_cases_per_crew"] = ranking["cases_prevented"] / crews_per_ward
+    ranking = ranking.sort_values(
+        ["roi_cases_per_crew", "ward_id"], ascending=[False, True]
+    ).reset_index(drop=True)
+    ranking.insert(0, "roi_rank", ranking.index + 1)
+    return ranking.round(2)
