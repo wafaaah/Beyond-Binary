@@ -49,10 +49,6 @@ def decide(index, status):
     requests[index]["status"] = status
 
 
-def save_role():
-    st.session_state["my_role"] = st.session_state["role"]
-
-
 def request_table(rows, title):
     colors = {"Waiting": AMBER, "Approved": OLIVE, "Declined": RED}
     st.markdown(table(title, ["WARD", "NEED", "AMOUNT", "WEEK", "STATUS"], [
@@ -65,11 +61,10 @@ st.markdown(hero(
     "MY ROLE",
     f"One system for three public health users. Historical replay for the week of "
     f"{result['target_date'].iloc[0]:%d %b %Y}.",
-    [("Role view, not a secure login", False)],
+    [("Demo sign-in, not production security", False)],
 ), unsafe_allow_html=True)
-# keep the chosen role when the viewer moves between pages
-st.session_state["role"] = st.session_state.setdefault("my_role", next(iter(ROLES)))
-role = st.radio("I am a", list(ROLES), horizontal=True, key="role", on_change=save_role)
+role = st.session_state["user_role"]
+st.subheader(role)
 st.caption(ROLES[role])
 
 if role == "Ward Health Officer":
@@ -156,7 +151,7 @@ else:
                           args=(index, "Declined"), use_container_width=True)
         st.caption("A decision records the answer. It does not change the automatic allocation.")
     else:
-        st.info("No requests yet. Send one from the Ward Health Officer view.")
+        st.info("No requests yet. Sign in as Ward Health Officer to send one.")
 
     st.subheader("Compare cities")
     st.dataframe(city_summary(result), hide_index=True, use_container_width=True)

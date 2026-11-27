@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
 from ml.allocation import forecast, load_data, peak_week  # noqa: E402
 from ml.simulator import simulation_weeks  # noqa: E402
 from i18n import enable  # noqa: E402
+from role_gate import require_login  # noqa: E402
 from theme import CSS  # noqa: E402
 
 RISK_COLORS = {
@@ -75,6 +76,8 @@ def scenario_controls():
 def apply_style(bangla_page=False):
     st.markdown(CSS, unsafe_allow_html=True)
     enable(bangla_page=bangla_page)
+    if not bangla_page:  # the public advisory page needs no sign-in
+        require_login()
 
 
 def risk_style(value):

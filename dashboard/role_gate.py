@@ -1,50 +1,84 @@
-"""Entry screen: choose a role first, then open that role's page."""
+"""Demo sign-in for the three roles.
+
+The accounts are fixed and shown on screen so that judges can enter easily.
+This is a demonstration of role-based access, not production security.
+"""
 import streamlit as st
 
-CARDS = [
-    ("Ward Health Officer", "&#128737;", "#F4B647",
-     "Watch your ward, act on urgent risk, ask for spray teams and supplies."),
-    ("Hospital Manager", "&#127973;", "#F2762E",
-     "Watch bed shortage and patient pressure, move patients to another ward."),
-    ("City Health Authority", "&#127963;", "#B565E8",
-     "Compare all wards and share limited stock and spraying teams."),
-]
+# role: (username, password, icon, colour, duty)
+DEMO_USERS = {
+    "Ward Health Officer": (
+        "officer", "officer123", "&#128737;", "#F4B647",
+        "Watch your ward, act on urgent risk, ask for spray teams and supplies."),
+    "Hospital Manager": (
+        "hospital", "hospital123", "&#127973;", "#F2762E",
+        "Watch bed shortage and patient pressure, move patients to another ward."),
+    "City Health Authority": (
+        "city", "city123", "&#127963;", "#B565E8",
+        "Compare all wards and share limited stock and spraying teams."),
+}
+ROLE_PAGE = "pages/6_My_Role.py"
 
 
-def show_role_gate():
-    """Stop the front page until a role or the full dashboard is chosen."""
-    if st.session_state.get("entered"):
-        if st.sidebar.button("Change role", use_container_width=True):
-            st.session_state["entered"] = False
-            st.rerun()
-        return
+def check_login(username, password):
+    """Return the role for a correct demo account, otherwise None."""
+    for role, (name, secret, *_) in DEMO_USERS.items():
+        if username.strip().lower() == name and password == secret:
+            return role
+    return None
+
+
+def sign_out():
+    st.session_state.pop("user_role", None)
+
+
+def _enter(role):
+    st.session_state["user_role"] = role
+    st.switch_page(ROLE_PAGE)
+
+
+def require_login():
+    """Show the sign-in screen and stop the page until a role has signed in."""
+    role = st.session_state.get("user_role")
+    if role:
+        st.sidebar.markdown(f"**Signed in:** {role}")
+        st.sidebar.button("Log out", on_click=sign_out, use_container_width=True)
+        return role
 
     st.markdown(
-        "<div style='text-align:center;padding:18px 0 22px'>"
+        "<div style='text-align:center;padding:12px 0 20px'>"
         "<div style='font-size:42px;font-weight:800;color:#F6F0FA'>DengueWatch</div>"
         "<div style='color:#F4B647;font-size:16px'>Public Health Operations Dashboard</div>"
-        "<div style='color:#D2C3DD;margin-top:14px'>Choose your role to continue</div></div>",
+        "<div style='color:#D2C3DD;margin-top:12px'>Sign in with your role</div></div>",
         unsafe_allow_html=True,
     )
-    for column, (role, icon, color, text) in zip(st.columns(3), CARDS):
+    for column, (name, user) in zip(st.columns(3), DEMO_USERS.items()):
+        username, password, icon, color, duty = user
         column.markdown(
             f"<div style='border:1px solid #4B2A62;border-top:5px solid {color};"
-            "border-radius:16px;background:#251530;padding:22px 18px;text-align:center;"
-            "min-height:210px;margin-bottom:8px'>"
-            f"<div style='font-size:44px'>{icon}</div>"
-            f"<div style='font-size:19px;font-weight:800;color:#F6F0FA'>{role}</div>"
-            f"<div style='font-size:14px;color:#D2C3DD;margin-top:8px'>{text}</div></div>",
+            "border-radius:16px;background:#251530;padding:20px 16px;text-align:center;"
+            "min-height:250px;margin-bottom:8px'>"
+            f"<div style='font-size:42px'>{icon}</div>"
+            f"<div style='font-size:19px;font-weight:800;color:#F6F0FA'>{name}</div>"
+            f"<div style='font-size:14px;color:#D2C3DD;margin:8px 0 12px'>{duty}</div>"
+            "<div style='font-size:13px;color:#BFA9CE'>Demo account</div>"
+            f"<code>{username}</code> &nbsp; <code>{password}</code></div>",
             unsafe_allow_html=True,
         )
-        if column.button("Continue", key=f"gate_{role}", type="primary",
+        if column.button("Demo login", key=f"demo_{username}", type="primary",
                          use_container_width=True):
-            st.session_state["entered"] = True
-            st.session_state["my_role"] = role
-            st.switch_page("pages/6_My_Role.py")
+            _enter(name)
 
-    _, middle, _ = st.columns([1, 1, 1])
-    if middle.button("Open full dashboard", use_container_width=True):
-        st.session_state["entered"] = True
-        st.rerun()
-    st.caption("Role view for the demo, not a secure login.")
+    _, middle, _ = st.columns([1, 1.4, 1])
+    with middle.form("login"):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submitted = st.form_submit_button("Sign in", use_container_width=True)
+    if submitted:
+        found = check_login(username, password)
+        if found:
+            _enter(found)
+        middle.error("Wrong username or password.")
+    st.caption("Demo sign-in with fixed accounts, not production security. "
+               "The Public Advisory page is open to everyone.")
     st.stop()

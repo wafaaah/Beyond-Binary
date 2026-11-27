@@ -163,7 +163,7 @@ PHRASES.update({
     "Waiting": "অপেক্ষমাণ", "Approved": "অনুমোদিত", "Declined": "বাতিল",
     "A decision records the answer. It does not change the automatic allocation.":
         "সিদ্ধান্ত শুধু লিপিবদ্ধ হয়; স্বয়ংক্রিয় বণ্টন বদলায় না।",
-    "No requests yet. Send one from the Ward Health Officer view.": "এখনো অনুরোধ নেই। ওয়ার্ড কর্মকর্তার ভিউ থেকে পাঠান।",
+    "No requests yet. Sign in as Ward Health Officer to send one.": "এখনো অনুরোধ নেই। ওয়ার্ড কর্মকর্তা হিসেবে প্রবেশ করে পাঠান।",
     "Compare cities": "শহর তুলনা", "All wards in priority order": "অগ্রাধিকার ক্রমে সব ওয়ার্ড",
     "Download allocation CSV": "বণ্টন CSV ডাউনলোড",
     "Bed capacity is estimated. Requests stay in this browser session only and are not sent to anyone.":
@@ -175,4 +175,13 @@ PHRASES.update({
     "Choose your role to continue": "চালিয়ে যেতে আপনার দায়িত্ব বাছাই করুন", "Continue": "প্রবেশ করুন",
     "Open full dashboard": "পুরো ড্যাশবোর্ড খুলুন",
     "Role view for the demo, not a secure login.": "ডেমোর জন্য দায়িত্বভিত্তিক ভিউ, নিরাপদ লগইন নয়।",
+})
+
+PHRASES.update({
+    "Sign in with your role": "আপনার দায়িত্ব অনুযায়ী প্রবেশ করুন", "Demo account": "ডেমো অ্যাকাউন্ট",
+    "Demo login": "ডেমো লগইন", "Username": "ইউজারনেম", "Password": "পাসওয়ার্ড", "Sign in": "প্রবেশ করুন",
+    "Wrong username or password.": "ইউজারনেম বা পাসওয়ার্ড ভুল।", "Signed in:": "প্রবেশ করেছেন:", "Log out": "বের হন",
+    "Demo sign-in with fixed accounts, not production security. The Public Advisory page is open to everyone.":
+        "নির্দিষ্ট ডেমো অ্যাকাউন্ট; এটি পূর্ণ নিরাপত্তা ব্যবস্থা নয়। জনসাধারণের পরামর্শ পাতা সবার জন্য খোলা।",
+    "Demo sign-in, not production security": "ডেমো লগইন, পূর্ণ নিরাপত্তা ব্যবস্থা নয়",
 })
