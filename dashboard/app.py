@@ -19,6 +19,7 @@ from mock_data import (
 )
 
 from style import load_css
+from role_gate import show_role_gate
 from i18n import enable, is_bangla, t
 
 from components import (
@@ -358,6 +359,7 @@ st.set_page_config(
 
 st.markdown(load_css(), unsafe_allow_html=True)
 enable(in_sidebar=False)
+show_role_gate()
 
 st.markdown(
     html(

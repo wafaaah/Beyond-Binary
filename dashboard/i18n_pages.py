@@ -137,3 +137,42 @@ PATTERNS += [
     (r"^Download (SMS|WhatsApp)$", r"\1 ডাউনলোড"),
     (r"(SMS|WhatsApp) for (\d+) wards", r"\2টি ওয়ার্ডের \1"),
 ]
+
+PHRASES.update({
+    "MY ROLE": "আমার দায়িত্ব", "I am a": "আমি", "Ward Health Officer": "ওয়ার্ড স্বাস্থ্য কর্মকর্তা",
+    "Hospital Manager": "হাসপাতাল ব্যবস্থাপক", "City Health Authority": "নগর স্বাস্থ্য কর্তৃপক্ষ",
+    "One system for three public health users. Historical replay for the week of":
+        "তিন ধরনের জনস্বাস্থ্য ব্যবহারকারীর জন্য একটি ব্যবস্থা। অতীত সপ্তাহের পুনঃপ্রদর্শন:",
+    "Role view, not a secure login": "দায়িত্বভিত্তিক ভিউ, নিরাপদ লগইন নয়",
+    "Watch your ward, act on urgent risk, ask for spray teams and supplies.":
+        "নিজ ওয়ার্ড দেখুন, জরুরি ঝুঁকিতে ব্যবস্থা নিন, স্প্রে দল ও সরঞ্জাম চান।",
+    "Watch bed shortage and patient pressure, move patients to another ward.":
+        "শয্যা ঘাটতি ও রোগীর চাপ দেখুন, রোগী অন্য ওয়ার্ডে পাঠান।",
+    "Compare all wards and share limited stock and spraying teams.":
+        "সব ওয়ার্ড তুলনা করে সীমিত মজুত ও স্প্রে দল বণ্টন করুন।",
+    "My ward": "আমার ওয়ার্ড", "Risk level": "ঝুঁকির মাত্রা", "Priority rank": "অগ্রাধিকার ক্রম",
+    "assigned / needed": "পেয়েছে / লাগবে", "Supplies for my ward": "আমার ওয়ার্ডের সরঞ্জাম",
+    "ITEM": "সরঞ্জাম", "NEEDED": "প্রয়োজন", "SHORT": "ঘাটতি", "NEED": "চাহিদা", "AMOUNT": "পরিমাণ",
+    "WEEK": "সপ্তাহ", "Ask the city authority": "নগর কর্তৃপক্ষের কাছে অনুরোধ", "Request": "অনুরোধ:",
+    "My requests": "আমার অনুরোধ", "My ward is fully covered in this scenario.": "এই পরিস্থিতিতে আমার ওয়ার্ডের চাহিদা পূরণ হয়েছে।",
+    "Download field team SMS": "মাঠ দলের SMS ডাউনলোড", "Overflow patients": "অতিরিক্ত রোগী",
+    "Wards with bed shortage": "শয্যা ঘাটতির ওয়ার্ড", "No ward in this city is over capacity.": "এই শহরে কোনো ওয়ার্ডে শয্যা ঘাটতি নেই।",
+    "Move a patient": "রোগী স্থানান্তর", "Urgent wards": "জরুরি ওয়ার্ড", "Regional stock": "আঞ্চলিক মজুত",
+    "Crews allocated": "বরাদ্দ দল", "Waiting requests": "অপেক্ষমাণ অনুরোধ", "from ward officers": "ওয়ার্ড কর্মকর্তাদের",
+    "Requests from wards": "ওয়ার্ডের অনুরোধ", "Request inbox": "অনুরোধ তালিকা", "Approve": "অনুমোদন", "Decline": "বাতিল",
+    "Waiting": "অপেক্ষমাণ", "Approved": "অনুমোদিত", "Declined": "বাতিল",
+    "A decision records the answer. It does not change the automatic allocation.":
+        "সিদ্ধান্ত শুধু লিপিবদ্ধ হয়; স্বয়ংক্রিয় বণ্টন বদলায় না।",
+    "No requests yet. Send one from the Ward Health Officer view.": "এখনো অনুরোধ নেই। ওয়ার্ড কর্মকর্তার ভিউ থেকে পাঠান।",
+    "Compare cities": "শহর তুলনা", "All wards in priority order": "অগ্রাধিকার ক্রমে সব ওয়ার্ড",
+    "Download allocation CSV": "বণ্টন CSV ডাউনলোড",
+    "Bed capacity is estimated. Requests stay in this browser session only and are not sent to anyone.":
+        "শয্যা ধারণক্ষমতা অনুমান। অনুরোধ শুধু এই ব্রাউজার সেশনে থাকে, কারও কাছে পাঠানো হয় না।",
+})
+
+PHRASES.update({
+    "Change role": "দায়িত্ব বদলান", "Public Health Operations Dashboard": "জনস্বাস্থ্য কার্যক্রম ড্যাশবোর্ড",
+    "Choose your role to continue": "চালিয়ে যেতে আপনার দায়িত্ব বাছাই করুন", "Continue": "প্রবেশ করুন",
+    "Open full dashboard": "পুরো ড্যাশবোর্ড খুলুন",
+    "Role view for the demo, not a secure login.": "ডেমোর জন্য দায়িত্বভিত্তিক ভিউ, নিরাপদ লগইন নয়।",
+})
