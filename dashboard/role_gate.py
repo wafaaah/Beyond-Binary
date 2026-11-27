@@ -5,6 +5,8 @@ This is a demonstration of role-based access, not production security.
 """
 import streamlit as st
 
+from splash import show_intro
+
 # role: (username, password, icon, colour, duty)
 DEMO_USERS = {
     "Ward Health Officer": (
@@ -46,6 +48,7 @@ def require_login():
         st.sidebar.button("Log out", on_click=sign_out, use_container_width=True)
         return role
 
+    show_intro()
     # public entry comes first: no account needed
     text, action = st.columns([3, 1])
     text.markdown(
