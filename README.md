@@ -1,4 +1,4 @@
-# Beyond-Binary
+﻿# Beyond-Binary
 
 ## DengueWatch: Urban Dengue Forecast and Response Dashboard
 
@@ -92,7 +92,7 @@ The default demonstration week (origin 12 August 2024) is the test-period week w
 
 - **Claude (Anthropic):** substantial help with Phase 2 code, interface design, SVG artwork and opening animation, English and Bangla text, and documentation drafts.
 - **ChatGPT:** interface design reference images.
-- **Logo:** supplied by the team. Source: [ADD SOURCE]
+- **Logo:** generated with Microsoft Copilot.
 - **Libraries:** Streamlit, pandas, NumPy, scikit-learn, joblib, Plotly, pydeck.
 - The forecasts come from the team's scikit-learn models. The app calls no generative AI service.
 
