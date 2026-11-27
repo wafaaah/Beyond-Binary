@@ -22,6 +22,8 @@ DEMO_USERS = {
 }
 ROLE_PAGE = "pages/6_My_Role.py"
 PUBLIC_PAGE = "pages/5_Public_Advisory.py"
+PUBLIC_BUTTON_HEIGHT = 84  # pixels; change to resize the Public Advisory button
+PUBLIC_BUTTON_FONT = 20  # largest text size in pixels
 
 
 def check_login(username, password):
@@ -141,8 +143,12 @@ def require_login():
         _sign_in_step(selected)
     else:
         # public entry comes first: no account needed
-        text, action = st.columns([3, 1])
+        text, action = st.columns([2.4, 1])
         text.markdown(
+            "<style>.st-key-public_entry button{"
+            f"min-height:{PUBLIC_BUTTON_HEIGHT}px;border-radius:14px}}"
+            ".st-key-public_entry button p{"
+            f"font-size:clamp(15px,1.4vw,{PUBLIC_BUTTON_FONT}px);font-weight:800}}</style>"
             "<div style='border:1px solid #FFD98A;border-left:6px solid #C9861A;border-radius:14px;"
             "background:linear-gradient(100deg,#F8C95C,#EDA43A);padding:14px 18px'>"
             "<div style='font-size:19px;font-weight:800;color:#24102F'>&#128226; Are you a member "
