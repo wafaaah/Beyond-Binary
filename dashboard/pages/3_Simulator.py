@@ -57,7 +57,7 @@ toggles = st.columns([1, 1, 1, 1, 1.6])
 layers = {
     key for column, (key, label) in zip(toggles, [
         ("heat", "Heat zones"), ("wards", "Ward pins"),
-        ("route", "Crew path"), ("labels", "City names"),
+        ("route", "Visit order line"), ("labels", "City names"),
     ]) if column.checkbox(label, value=True, key=f"layer_{key}")
 }
 mode = toggles[4].radio("Colour wards by", ["Crew impact", "Forecast risk"], horizontal=True)
@@ -134,7 +134,7 @@ else:
 st.markdown(simulator_console(
     f"{crews} crews available | local models, offline | {notices[0][0].lower()}",
     operations_map(map_wards, layers, notices, routes.values()),
-    kpis, impact_rows, f"Crew route: {focus}",
+    kpis, impact_rows, f"Visit priority: {focus}",
     route_map(city_ids, focus, routes.get(focus, [])),
     chart_title, trend_chart(["Week +2", "Week +3", "Week +4"], series),
 ), unsafe_allow_html=True)
