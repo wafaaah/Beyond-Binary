@@ -19,11 +19,11 @@ from mock_data import (
 )
 
 from style import load_css
+from dashboard_ui import render_briefing
 from role_gate import require_login
 from i18n import enable, is_bangla, t
 
 from components import (
-    render_header,
     render_data_notice,
     render_section_title,
     render_ward_profile,
@@ -701,57 +701,11 @@ ward_forecasts = get_ward_forecasts(
 # DASHBOARD HEADER
 # ============================================================
 
-render_header()
-
-st.markdown(
-    f"""
-    <div class="dashboard-subtitle">
-        {t("WARD RISK INTELLIGENCE SYSTEM | BANGLADESH")}
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-render_data_notice()
-
-
-# ============================================================
-# SURVEILLANCE OVERVIEW + SUMMARY METRICS
-# ============================================================
-
-st.markdown('## ' + t('Surveillance Overview'))
-st.caption(
-    f"{'পর্যবেক্ষণ এলাকা' if is_bangla() else 'Monitoring area'}: {t(city)} | "
-    f"{'ওয়ার্ড' if is_bangla() else 'Administrative level'}: {t(selected_ward)}"
-)
-st.caption(
-    f"{'তথ্যের সময়কাল' if is_bangla() else 'Historical reporting period'}: {start_date} → {end_date}"
-)
-
 summary = get_summary(filtered_df)
-
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    st.metric(
-        t('Historical Dengue Cases'),
-        f'{summary["total_cases"]:,}',
-    )
-
-with col2:
-    st.metric(t('Wards Represented'), summary["total_wards"])
-
-with col3:
-    st.metric(
-        t('Average Rainfall'),
-        f'{summary["avg_rainfall"]:.1f} mm',
-    )
-
-with col4:
-    st.metric(
-        t('Average Temperature'),
-        f'{summary["avg_temperature"]:.1f} °C',
-    )
+render_briefing(
+    filtered_df, city, selected_ward, start_date, end_date, summary, ward_forecasts
+)
+render_data_notice()
 
 
 # ============================================================
