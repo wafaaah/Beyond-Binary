@@ -17,6 +17,7 @@ from theme import (  # noqa: E402
     AMBER, GOLD, OLIVE, ORANGE, RED, actions, bars, gauges, hero, style_figure,
     ward_board, flow,
 )
+from command_map import render_command_map  # noqa: E402
 from ml.allocation import allocate, city_summary  # noqa: E402
 from ml.routing import estimate_capacity, route_overflow  # noqa: E402
 
@@ -64,6 +65,8 @@ st.markdown(gauges([
      f"{int(result['crews_allocated'].sum())} of {int(required)} crews needed",
      coverage, ORANGE),
 ]), unsafe_allow_html=True)
+
+render_command_map(result, data, week, moves)
 
 left, right = st.columns([1.7, 1], gap="medium")
 

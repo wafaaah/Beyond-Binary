@@ -32,7 +32,7 @@ def _text(x, y, text, size=13, color="#F6F0FA", weight=700, anchor="middle"):
             f"font-weight='{weight}' fill='{color}' text-anchor='{anchor}'>{text}</text>")
 
 
-def operations_map(wards, layers, alerts=(), routes=()):
+def operations_map(wards, layers, alerts=(), routes=(), selected=None):
     """
     wards: dicts with id, city, color, heat (0 to 1), crews.
     layers: set of 'heat', 'wards', 'route', 'labels'.
@@ -90,6 +90,12 @@ def operations_map(wards, layers, alerts=(), routes=()):
                 svg.append(f"<circle cx='{x:.0f}' cy='{y:.0f}' r='12' fill='#281634' "
                            f"stroke='{ward['color']}' stroke-width='3'/>")
                 svg.append(_text(x, y + 4, number, 10))
+    if selected in where:
+        x, y = where[selected]
+        svg.append(f"<circle cx='{x:.0f}' cy='{y:.0f}' r='21' fill='none' stroke='#FFFFFF' "
+                   "stroke-width='3'/>"
+                   f"<circle cx='{x:.0f}' cy='{y:.0f}' r='29' fill='none' stroke='#F4B647' "
+                   "stroke-width='2' stroke-dasharray='5 4'/>")
     if "labels" in layers:
         for city in by_city:
             if city in ZONES:
