@@ -3,6 +3,8 @@ import difflib
 import re
 import unicodedata
 
+import public_en
+
 CITIES = {
     "Chattogram": ("chattogram", "chittagong", "ctg", "ccc", "চট্টগ্রাম"),
     "Dhaka North": ("dhaka north", "north dhaka", "dncc", "ঢাকা উত্তর", "uttor"),
@@ -171,6 +173,9 @@ def match_intent(question):
         for intent, canned in group.items():
             if text == normalize(canned):
                 return intent
+    for intent, (canned, _) in public_en.FAQ.items():
+        if text == normalize(canned):
+            return intent
     words = text.split()
     scores = {}
     for intent, keywords in KEYWORDS.items():
@@ -191,15 +196,28 @@ def match_intent(question):
     return max(scores, key=scores.get) if scores else None
 
 
-def _wards(frame):
+def questions(lang="bn"):
+    """Question buttons grouped by topic in the chosen language."""
+    if lang != "en":
+        return QUESTIONS
+    return {public_en.GROUPS[group]: {key: public_en.FAQ[key][0] for key in items}
+            for group, items in QUESTIONS.items()}
+
+
+def _wards(frame, lang="bn"):
     table = frame[["ward_id", "city", "risk_level"]].copy()
+    if lang == "en":
+        table.columns = ["Ward", "City", "Risk"]
+        return table
     table["risk_level"] = table["risk_level"].map(RISK_BN)
     table.columns = ["ওয়ার্ড", "শহর", "ঝুঁকি"]
     return table
 
 
-def answer(question, forecasts):
+def answer(question, forecasts, lang="bn"):
     """Return (markdown text, optional table). forecasts has one row per ward."""
+    if lang == "en":
+        return _answer_en(question, forecasts)
     text = normalize(question)
     city, number = find_city(text), find_ward(text)
     intent = match_intent(question)
@@ -240,3 +258,47 @@ def answer(question, forecasts):
     high = int(view["risk_level"].isin(["High", "Critical"]).sum())
     return (f"{scope}\n\n**{high}** টি ওয়ার্ডে বেশি বা খুব বেশি ঝুঁকি। সবার উপরের ওয়ার্ডগুলো:",
             _wards(view.sort_values("predicted_cases", ascending=False).head(5)))
+
+
+def _answer_en(question, forecasts):
+    text = normalize(question)
+    city, number = find_city(text), find_ward(text)
+    intent = match_intent(question)
+    static = public_en.FAQ[intent][1] if intent else None
+    if intent in HEALTH:
+        return static + "\n\n_General information, not a substitute for medical advice._", None
+    if number is None and static:
+        return static, None
+    if number is None and intent is None and city is None:
+        return ("Sorry, I did not understand. Click a question, or type for example "
+                "“Dhaka North 3”, “Gazipur 2” or “dengue symptoms”."), None
+
+    target = forecasts["target_date"].iloc[0].strftime("%d-%m-%Y")
+    scope = f"Forecast for the week of **{target}** (demo using past data)"
+    if city:
+        scope += f", city: {city}"
+    view = forecasts[forecasts["city"] == city] if city else forecasts
+
+    if number is not None:
+        found = view[view["ward_id"].str.endswith(f"_{number:02d}")]
+        if found.empty:
+            return f"Ward number {number} was not found.", None
+        worst = max(found["risk_level"], key=list(RISK_BN).index)
+        label, advice = public_en.RISK[worst]
+        hint = "" if city else " Add the city name to see only your ward."
+        several = "" if len(found) == 1 else " (highest among the cities)"
+        return (f"{scope}\n\nWard {number}: **{label}**{several}.{hint}\n\n"
+                f"**What to do:** {advice}"), _wards(found, "en")
+
+    if intent == "low":
+        lowest = view.sort_values(["predicted_cases", "ward_id"]).head(5)
+        return (f"{scope}\n\nWards with comparatively low predicted risk (low is not "
+                "risk free):", _wards(lowest, "en"))
+
+    if intent == "live":
+        return f"No, this is not today's alert. Shown now: {scope}.", None
+
+    high = int(view["risk_level"].isin(["High", "Critical"]).sum())
+    return (f"{scope}\n\n**{high}** wards are at high or very high risk. Top wards:",
+            _wards(view.sort_values("predicted_cases", ascending=False).head(5), "en"))
+

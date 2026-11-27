@@ -7,7 +7,8 @@ DASHBOARD = Path(__file__).resolve().parents[1]
 if str(DASHBOARD) not in sys.path:
     sys.path.insert(0, str(DASHBOARD))
 
-from copilot_engine import QUESTIONS, answer  # noqa: E402
+from copilot_engine import answer, questions  # noqa: E402
+from public_en import RISK as RISK_EN  # noqa: E402
 from public_ui import poster_html, risk_card_html  # noqa: E402
 from shared import (  # noqa: E402
     RISK_COLORS, apply_style, cached_forecast, default_week,
@@ -15,6 +16,11 @@ from shared import (  # noqa: E402
 
 st.set_page_config(page_title="জনসাধারণের পরামর্শ", layout="wide")
 apply_style(bangla_page=True)
+lang = st.session_state.get("lang", "en")
+
+
+def say(bangla, english):
+    return english if lang == "en" else bangla
 
 RISK_BN = {
     "Low": ("কম ঝুঁকি", "সতর্ক থাকুন এবং ঘরের আশেপাশে পানি জমতে দেবেন না।"),
@@ -44,46 +50,55 @@ def bn_date(date):
     return text.translate(BN_DIGITS)
 
 
-st.title("আপনার ওয়ার্ডে ডেঙ্গুর ঝুঁকি")
+st.title(say("আপনার ওয়ার্ডে ডেঙ্গুর ঝুঁকি", "Dengue risk in your ward"))
 
 week = st.session_state.get("week", default_week())
 data = cached_forecast(week, 2)
 target = data["target_date"].iloc[0]
-st.warning(
+st.warning(say(
     f"ডেমো: এটি পুরোনো তথ্যের ভিত্তিতে {bn_date(target)} সপ্তাহের পূর্বাভাস। "
-    "এটি আজকের সতর্কবার্তা নয়।"
-)
+    "এটি আজকের সতর্কবার্তা নয়।",
+    f"Demo: this forecast for the week of {target:%d %b %Y} is based on past data. "
+    "It is not today's alert.",
+))
 
 city = st.selectbox(
-    "শহর", sorted(data["city"].unique()),
-    format_func=lambda c: CITY_BN.get(c, c),
+    say("শহর", "City"), sorted(data["city"].unique()),
+    format_func=lambda c: say(CITY_BN.get(c, c), c),
 )
 wards = data[data["city"] == city]
 ward = st.selectbox(
-    "ওয়ার্ড নম্বর", sorted(wards["ward_id"]),
-    format_func=lambda w: w.rsplit("_", 1)[-1].translate(BN_DIGITS),
+    say("ওয়ার্ড নম্বর", "Ward number"), sorted(wards["ward_id"]),
+    format_func=lambda w: say(w.rsplit("_", 1)[-1].translate(BN_DIGITS), w.rsplit("_", 1)[-1]),
 )
 risk = wards.loc[wards["ward_id"] == ward, "risk_level"].iloc[0]
-label, advice = RISK_BN[risk]
+label, advice = say(RISK_BN[risk], RISK_EN[risk])
 color = RISK_COLORS[risk]
 
-st.markdown(risk_card_html(risk, label, advice, color), unsafe_allow_html=True)
+st.markdown(risk_card_html(risk, label, advice, color, lang), unsafe_allow_html=True)
 
 
 
 def show_copilot(forecasts):
-    st.caption("প্রশ্নে ক্লিক করুন অথবা নিজের এলাকা বা প্রশ্ন লিখে খুঁজুন (বাংলা, English বা Banglish)")
+    st.caption(say(
+        "প্রশ্নে ক্লিক করুন অথবা নিজের এলাকা বা প্রশ্ন লিখে খুঁজুন (বাংলা, English বা Banglish)",
+        "Click a question, or search your area or question (Bangla, English or Banglish)",
+    ))
     question = None
     with st.form("copilot_search"):
         text = st.text_input(
-            "খুঁজুন", placeholder="যেমন: ঢাকা উত্তর ৩, Gazipur 2, ডেঙ্গুর লক্ষণ",
+            say("খুঁজুন", "Search"),
+            placeholder=say("যেমন: ঢাকা উত্তর ৩, Gazipur 2, ডেঙ্গুর লক্ষণ",
+                            "e.g. Dhaka North 3, Gazipur 2, dengue symptoms"),
         )
-        if st.form_submit_button("উত্তর দেখুন", use_container_width=True):
+        if st.form_submit_button(say("উত্তর দেখুন", "Show answer"),
+                                 use_container_width=True):
             question = text.strip() or None
 
     answer_box = st.container()
-    st.markdown("**সাধারণ প্রশ্ন** (বিষয় খুলে ক্লিক করুন)")
-    for number, (group, items) in enumerate(QUESTIONS.items()):
+    st.markdown(say("**সাধারণ প্রশ্ন** (বিষয় খুলে ক্লিক করুন)",
+                    "**Common questions** (open a topic and click)"))
+    for number, (group, items) in enumerate(questions(lang).items()):
         with st.expander(group, expanded=number == 0):
             columns = st.columns(2)
             for i, (intent, prompt) in enumerate(items.items()):
@@ -94,7 +109,7 @@ def show_copilot(forecasts):
         st.session_state["copilot_last"] = question
     last = st.session_state.get("copilot_last")
     if last:
-        reply, table = answer(last, forecasts)
+        reply, table = answer(last, forecasts, lang)
         # shown right below the search box, so no scrolling is needed
         with answer_box:
             with st.chat_message("user"):
@@ -113,9 +128,14 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.write("")
-poster_tab, copilot_tab = st.tabs(["সচেতনতা পোস্টার", "Copilot: প্রশ্ন করুন"])
+poster_tab, copilot_tab = st.tabs([say("সচেতনতা পোস্টার", "Awareness poster"),
+                                   say("Copilot: প্রশ্ন করুন", "Copilot: ask a question")])
 with poster_tab:
-    st.markdown(poster_html(), unsafe_allow_html=True)
+    st.markdown(poster_html(lang), unsafe_allow_html=True)
 with copilot_tab:
     show_copilot(data)
-st.caption("সাধারণ তথ্য, চিকিৎসকের পরামর্শের বিকল্প নয়। সূত্র: WHO ও CDC-এর ডেঙ্গু নির্দেশনা।")
+st.caption(say(
+    "সাধারণ তথ্য, চিকিৎসকের পরামর্শের বিকল্প নয়। সূত্র: WHO ও CDC-এর ডেঙ্গু নির্দেশনা।",
+    "General information, not a substitute for medical advice. Source: WHO and CDC "
+    "dengue guidance.",
+))

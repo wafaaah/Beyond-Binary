@@ -1,6 +1,8 @@
 """Offline Bangla infographic for the public page. All artwork is inline SVG."""
 from base64 import b64encode
 
+import public_en
+
 SKIN, HAIR, INK = "#E8B48C", "#2B2230", "#1F3A4A"
 RED, TEAL, BLUE, WATER = "#D93A3F", "#0F7C86", "#2F6FB2", "#5BB8E8"
 
@@ -245,7 +247,14 @@ def _section(title, items, tone):
             f"<div class='dg-row'>{cells}</div></div>")
 
 
-def poster_html():
+def _english(html, table):
+    # longest first, so a short phrase never breaks a longer one
+    for bangla in sorted(table, key=len, reverse=True):
+        html = html.replace(bangla, table[bangla])
+    return html
+
+
+def poster_html(lang="bn"):
     hero = _svg(_mosquito() + _ban(r=43, width=6), "#DDF3F5")
     drops = "".join(
         f"<i class='dg-drop' style='left:{x}%;top:{y}%;width:{d}px;height:{d}px;animation-delay:{t}s'></i>"
@@ -271,12 +280,16 @@ def poster_html():
         + "<div class='dg-foot'><span>প্রয়োজনে দ্রুত ডাক্তারের পরামর্শ নিন</span>"
         "<span class='dg-call'>জরুরি: ৯৯৯</span></div></div>"
     )
+    if lang == "en":
+        html = _english(html, public_en.POSTER)
     return CSS + html
 
 
-def risk_card_html(level, label, advice, color):
+def risk_card_html(level, label, advice, color, lang="bn"):
     """Gradient risk banner with a four step meter."""
     steps = [("Low", "কম"), ("Medium", "মাঝারি"), ("High", "বেশি"), ("Critical", "খুব বেশি")]
+    if lang == "en":
+        steps = [(key, public_en.METER[name]) for key, name in steps]
     current = [name for name, _ in steps].index(level)
     meter = "".join(
         "<div style='flex:1;text-align:center;font-size:14px;font-weight:700;"
@@ -284,12 +297,15 @@ def risk_card_html(level, label, advice, color):
         f"background:{'#fff' if i <= current else 'rgba(255,255,255,.4)'}'></div>{name}</div>"
         for i, (_, name) in enumerate(steps)
     )
+    heading = "এই ওয়ার্ডের পূর্বাভাস"
+    if lang == "en":
+        heading = public_en.POSTER[heading]
     return (
         "<div style=\"font-family:'Hind Siliguri','Noto Sans Bengali','Nirmala UI',FreeSans,sans-serif;"
         "color:#fff;border-radius:24px;padding:26px 28px;text-align:center;"
         f"background:linear-gradient(120deg,rgba(0,0,0,.55),rgba(0,0,0,.18)),{color};"
         f"box-shadow:0 14px 36px {color}66;text-shadow:0 2px 8px rgba(0,0,0,.45)\">"
-        "<div style='font-size:15px'>এই ওয়ার্ডের পূর্বাভাস</div>"
+        f"<div style='font-size:15px'>{heading}</div>"
         f"<div style='font-size:40px;font-weight:800;line-height:1.4'>{label}</div>"
         f"<div style='font-size:19px;margin-bottom:18px'>{advice}</div>"
         f"<div style='display:flex;gap:8px;max-width:620px;margin:auto'>{meter}</div></div>"
