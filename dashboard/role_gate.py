@@ -70,6 +70,38 @@ def _card(name):
     )
 
 
+def _showcase():
+    """Lower band of the first screen: work flow, coverage figures and city artwork."""
+    from dashboard_ui import _skyline  # imported here to avoid a circular import
+
+    steps = [("&#128200;", "Forecast", "Ward risk 2 to 4 weeks ahead"),
+             ("&#128230;", "Allocate", "Share limited supplies and teams"),
+             ("&#127973;", "Route", "Plan where extra patients can go"),
+             ("&#128232;", "Dispatch", "Prepare orders for field teams")]
+    flow = "".join(
+        "<div style='flex:1;min-width:170px;border:1px solid #4B2A62;border-radius:14px;"
+        "background:#251530;padding:12px 14px'>"
+        f"<div style='font-size:22px'>{icon}</div>"
+        f"<div style='font-weight:800;color:#F4B647'>{name}</div>"
+        f"<div style='font-size:13px;color:#D2C3DD'>{note}</div></div>"
+        for icon, name, note in steps)
+    figures = "".join(
+        "<div style='min-width:110px'>"
+        f"<div style='font-size:34px;font-weight:800;color:#F4B647;line-height:1.1'>{value}</div>"
+        f"<div style='font-size:13px;color:#D2C3DD'>{label}</div></div>"
+        for value, label in [("60", "wards"), ("5", "city corporations"),
+                             ("2&ndash;4", "weeks ahead"), ("2", "languages")])
+    st.markdown(
+        f"<div style='display:flex;flex-wrap:wrap;gap:12px;margin:18px 0 12px'>{flow}</div>"
+        "<div style='display:flex;flex-wrap:wrap;align-items:center;gap:18px;overflow:hidden;"
+        "border:1px solid #4B2A62;border-radius:18px;padding:12px 24px;"
+        "background:linear-gradient(100deg,#2E1A3D,#3D2150)'>"
+        f"<div style='flex:2;display:flex;flex-wrap:wrap;gap:22px'>{figures}</div>"
+        f"<img src='{_skyline()}' alt='' style='flex:1;min-width:220px;max-width:380px'></div>",
+        unsafe_allow_html=True,
+    )
+
+
 def _sign_in_step(role):
     """Second step: authentication for the chosen role only."""
     username, password = DEMO_USERS[role][:2]
@@ -113,7 +145,7 @@ def require_login():
         text.markdown(
             "<div style='border:1px solid #6E8436;border-left:6px solid #A9BC5F;border-radius:14px;"
             "background:#222A1C;padding:14px 18px'>"
-            "<div style='font-size:19px;font-weight:800;color:#F6F0FA'>&#128226; Are you a member "
+            "<div style='font-size:19px;font-weight:800;color:#F4B647'>&#128226; Are you a member "
             "of the public?</div>"
             "<div style='font-size:14px;color:#D2C3DD'>See the dengue risk of your ward and health "
             "advice. No login needed.</div></div>",
@@ -128,6 +160,7 @@ def require_login():
             column.markdown(_card(name), unsafe_allow_html=True)
             column.button("Continue", key=f"role_{DEMO_USERS[name][0]}", type="primary",
                           on_click=choose, args=(name,), use_container_width=True)
+        _showcase()
     st.caption("Demo sign-in with fixed accounts, not production security. "
                "The Public Advisory page is open to everyone.")
     st.stop()

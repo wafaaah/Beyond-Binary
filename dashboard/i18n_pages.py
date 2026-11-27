@@ -197,3 +197,11 @@ PHRASES.update({
     "Choose your role": "আপনার দায়িত্ব বাছাই করুন", "Sign in to continue": "চালিয়ে যেতে প্রবেশ করুন",
     "Back to roles": "দায়িত্ব বাছাইয়ে ফিরুন",
 })
+
+PHRASES.update({
+    "Forecast": "পূর্বাভাস", "Ward risk 2 to 4 weeks ahead": "২ থেকে ৪ সপ্তাহ আগে ওয়ার্ডের ঝুঁকি",
+    "Allocate": "বরাদ্দ", "Share limited supplies and teams": "সীমিত সরঞ্জাম ও দল ভাগ করুন",
+    "Route": "রোগী স্থানান্তর", "Plan where extra patients can go": "অতিরিক্ত রোগী কোথায় যাবে তার পরিকল্পনা",
+    "Dispatch": "নির্দেশ প্রেরণ", "Prepare orders for field teams": "মাঠ দলের জন্য নির্দেশনা তৈরি করুন",
+    "wards": "ওয়ার্ড", "city corporations": "সিটি কর্পোরেশন", "weeks ahead": "সপ্তাহ আগাম", "languages": "ভাষা",
+})
