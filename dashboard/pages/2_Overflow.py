@@ -17,6 +17,7 @@ from ml.allocation import (  # noqa: E402
 from ml.routing import (  # noqa: E402
     city_bed_summary, estimate_capacity, route_overflow,
 )
+from transfer_ui import render_transfer_desk  # noqa: E402
 
 st.set_page_config(page_title="Overflow Routing", layout="wide")
 apply_style()
@@ -36,28 +37,34 @@ st.caption(
     f"Historical replay. Target week: {demand['target_date'].iloc[0]:%d %b %Y}. "
     "Capacity is an assumption: 90th percentile of past weekly bed demand."
 )
-c1, c2, c3 = st.columns(3)
-c1.metric("Overflow patients", int(wards["overflow"].sum()))
-c2.metric("Routed within city", int(wards["sent_out"].sum()))
-c3.metric("Unplaced", int(wards["unplaced"].sum()))
+overview_tab, desk_tab = st.tabs(["Overflow Overview", "Patient Transfer"])
 
-if wards["unplaced"].sum():
-    st.error("Some cities have no headroom left for all overflow patients.")
+with overview_tab:
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Overflow patients", int(wards["overflow"].sum()))
+    c2.metric("Routed within city", int(wards["sent_out"].sum()))
+    c3.metric("Unplaced", int(wards["unplaced"].sum()))
 
-st.subheader("City bed utilization")
-st.dataframe(summary, hide_index=True, use_container_width=True)
-st.bar_chart(summary.set_index("city")["utilization_pct"])
+    if wards["unplaced"].sum():
+        st.error("Some cities have no headroom left for all overflow patients.")
 
-city = st.selectbox("City", sorted(wards["city"].unique()))
-st.subheader("Transfer routes")
-city_moves = moves[moves["city"] == city]
-if city_moves.empty:
-    st.info("No transfers needed or no headroom available in this city.")
-else:
-    st.dataframe(city_moves, hide_index=True, use_container_width=True)
+    st.subheader("City bed utilization")
+    st.dataframe(summary, hide_index=True, use_container_width=True)
+    st.bar_chart(summary.set_index("city")["utilization_pct"])
 
-st.subheader("Ward deficit and headroom")
-view = wards[wards["city"] == city]
-st.dataframe(view, hide_index=True, use_container_width=True)
-st.download_button("Download transfers CSV", moves.to_csv(index=False),
-                   "transfers.csv", "text/csv")
+    city = st.selectbox("City", sorted(wards["city"].unique()))
+    st.subheader("Transfer routes")
+    city_moves = moves[moves["city"] == city]
+    if city_moves.empty:
+        st.info("No transfers needed or no headroom available in this city.")
+    else:
+        st.dataframe(city_moves, hide_index=True, use_container_width=True)
+
+    st.subheader("Ward deficit and headroom")
+    view = wards[wards["city"] == city]
+    st.dataframe(view, hide_index=True, use_container_width=True)
+    st.download_button("Download transfers CSV", moves.to_csv(index=False),
+                       "transfers.csv", "text/csv")
+
+with desk_tab:
+    render_transfer_desk(week, horizon, multiplier)
