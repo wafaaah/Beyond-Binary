@@ -4,6 +4,7 @@ from base64 import b64encode
 import streamlit as st
 
 from i18n import is_bangla, t
+from logo import logo_img
 from shared import RISK_COLORS
 
 CSS = """<style>
@@ -91,7 +92,7 @@ def render_briefing(frame, city, ward, start, end, summary, forecasts):
     st.markdown(
         f"<div class='db-hero' style=\"background-image:linear-gradient(90deg,#251530 34%,"
         f"rgba(37,21,48,.15) 75%),url('{_skyline()}')\">"
-        "<div class='db-title'>Dengue<b>Watch</b></div>"
+        f"<div class='db-title'>{logo_img()}Dengue<b>Watch</b></div>"
         f"<div class='db-sub'>{t('WARD RISK INTELLIGENCE SYSTEM | BANGLADESH')}</div>"
         f"<span class='db-chip gold'>{t(city)} | {t(ward)}</span>"
         f"<span class='db-chip'>{start:%d %b %Y} → {end:%d %b %Y}</span>"

@@ -5,6 +5,7 @@ This is a demonstration of role-based access, not production security.
 """
 import streamlit as st
 
+from logo import logo_img
 from splash import show_intro
 
 # role: (username, password, icon, colour, duty)
@@ -66,7 +67,8 @@ def require_login():
 
     st.markdown(
         "<div style='text-align:center;padding:12px 0 20px'>"
-        "<div style='font-size:42px;font-weight:800;color:#F6F0FA'>DengueWatch</div>"
+        "<div style='font-size:42px;font-weight:800;color:#F6F0FA'>"
+        f"{logo_img()}DengueWatch</div>"
         "<div style='color:#F4B647;font-size:16px'>Public Health Operations Dashboard</div>"
         "<div style='color:#D2C3DD;margin-top:12px'>Sign in with your role</div></div>",
         unsafe_allow_html=True,
