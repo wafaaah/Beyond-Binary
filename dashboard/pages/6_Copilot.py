@@ -54,8 +54,6 @@ for tab, (group, items) in zip(st.tabs(list(QUESTIONS)), QUESTIONS.items()):
                     question = text.strip() or question
             st.caption("শহর: চট্টগ্রাম, ঢাকা উত্তর, ঢাকা দক্ষিণ, গাজীপুর, নারায়ণগঞ্জ। "
                        "তথ্য পুরোনো ডেটার ডেমো পূর্বাভাস, আজকের নয়।")
-            with st.expander("পরিকল্পনাকারীদের প্রশ্ন"):
-                question = question_buttons(items) or question
         else:
             question = question_buttons(items) or question
 

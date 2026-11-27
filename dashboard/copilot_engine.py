@@ -165,7 +165,7 @@ def answer(question, data, week, horizon=2, stock=70, crews=20):
         return STATIC[intent], None
     if number is None and intent is None and city is None:
         return ("দুঃখিত, প্রশ্নটি বুঝতে পারিনি। উপরের কোনো প্রশ্নে ক্লিক করুন, অথবা এভাবে লিখুন: "
-                "“ঢাকা উত্তর ওয়ার্ড ৩ এর ঝুঁকি”, “saline shortage”, “ডেঙ্গুর লক্ষণ”।"), None
+                "“ঢাকা উত্তর ওয়ার্ড ৩ এর ঝুঁকি”, “Gazipur 2”, “ডেঙ্গুর লক্ষণ”।"), None
 
     plan = allocate(forecast(data, week, horizon), stock, crews)
     target = plan["target_date"].iloc[0].strftime("%d-%m-%Y")
