@@ -15,7 +15,7 @@ from shared import (  # noqa: E402
 )
 from theme import (  # noqa: E402
     AMBER, GOLD, OLIVE, ORANGE, RED, actions, bars, gauges, hero, style_figure,
-    ward_board,
+    ward_board, flow,
 )
 from ml.allocation import allocate, city_summary  # noqa: E402
 from ml.routing import estimate_capacity, route_overflow  # noqa: E402
@@ -37,6 +37,8 @@ st.markdown(hero(
      (f"Source: {result['forecast_source'].iloc[0]}", False),
      (f"{horizon} week forecast", False)],
 ), unsafe_allow_html=True)
+
+st.markdown(flow(1), unsafe_allow_html=True)
 
 total = result["predicted_cases"].sum()
 weekly_actual = data.groupby("date")["dengue_cases"].sum()
