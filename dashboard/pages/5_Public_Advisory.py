@@ -7,6 +7,7 @@ DASHBOARD = Path(__file__).resolve().parents[1]
 if str(DASHBOARD) not in sys.path:
     sys.path.insert(0, str(DASHBOARD))
 
+from copilot_engine import QUESTIONS, answer  # noqa: E402
 from public_ui import poster_html, risk_card_html  # noqa: E402
 from shared import (  # noqa: E402
     RISK_COLORS, apply_style, cached_forecast, default_week,
@@ -68,6 +69,53 @@ color = RISK_COLORS[risk]
 
 st.markdown(risk_card_html(risk, label, advice, color), unsafe_allow_html=True)
 
+
+
+def show_copilot(forecasts):
+    st.caption("প্রশ্নে ক্লিক করুন অথবা নিজের এলাকা বা প্রশ্ন লিখে খুঁজুন (বাংলা, English বা Banglish)")
+    question = None
+    with st.form("copilot_search"):
+        text = st.text_input(
+            "খুঁজুন", placeholder="যেমন: ঢাকা উত্তর ৩, Gazipur 2, ডেঙ্গুর লক্ষণ",
+        )
+        if st.form_submit_button("উত্তর দেখুন", use_container_width=True):
+            question = text.strip() or None
+
+    answer_box = st.container()
+    st.markdown("**সাধারণ প্রশ্ন** (বিষয় খুলে ক্লিক করুন)")
+    for number, (group, items) in enumerate(QUESTIONS.items()):
+        with st.expander(group, expanded=number == 0):
+            columns = st.columns(2)
+            for i, (intent, prompt) in enumerate(items.items()):
+                if columns[i % 2].button(prompt, key=f"q_{intent}", use_container_width=True):
+                    question = prompt
+
+    if question:
+        st.session_state["copilot_last"] = question
+    last = st.session_state.get("copilot_last")
+    if last:
+        reply, table = answer(last, forecasts)
+        # shown right below the search box, so no scrolling is needed
+        with answer_box:
+            with st.chat_message("user"):
+                st.write(last)
+            with st.chat_message("assistant"):
+                st.markdown(reply)
+                if table is not None:
+                    st.dataframe(table, hide_index=True, use_container_width=True)
+
+
+st.markdown(
+    "<style>.stButton>button{border-radius:14px;min-height:52px;"
+    "border:1px solid rgba(53,194,176,.55);"
+    "background:linear-gradient(120deg,rgba(15,124,134,.22),rgba(53,194,176,.08))}"
+    ".stButton>button:hover{border-color:#35C2B0}</style>",
+    unsafe_allow_html=True,
+)
 st.write("")
-st.markdown(poster_html(), unsafe_allow_html=True)
+poster_tab, copilot_tab = st.tabs(["সচেতনতা পোস্টার", "Copilot: প্রশ্ন করুন"])
+with poster_tab:
+    st.markdown(poster_html(), unsafe_allow_html=True)
+with copilot_tab:
+    show_copilot(data)
 st.caption("সাধারণ তথ্য, চিকিৎসকের পরামর্শের বিকল্প নয়। সূত্র: WHO ও CDC-এর ডেঙ্গু নির্দেশনা।")
