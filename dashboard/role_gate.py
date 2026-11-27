@@ -18,6 +18,7 @@ DEMO_USERS = {
         "Compare all wards and share limited stock and spraying teams."),
 }
 ROLE_PAGE = "pages/6_My_Role.py"
+PUBLIC_PAGE = "pages/5_Public_Advisory.py"
 
 
 def check_login(username, password):
@@ -44,6 +45,21 @@ def require_login():
         st.sidebar.markdown(f"**Signed in:** {role}")
         st.sidebar.button("Log out", on_click=sign_out, use_container_width=True)
         return role
+
+    # public entry comes first: no account needed
+    text, action = st.columns([3, 1])
+    text.markdown(
+        "<div style='border:1px solid #6E8436;border-left:6px solid #A9BC5F;border-radius:14px;"
+        "background:#222A1C;padding:14px 18px'>"
+        "<div style='font-size:19px;font-weight:800;color:#F6F0FA'>&#128226; Are you a member "
+        "of the public?</div>"
+        "<div style='font-size:14px;color:#D2C3DD'>See the dengue risk of your ward and health "
+        "advice. No login needed.</div></div>",
+        unsafe_allow_html=True,
+    )
+    if action.button("Open Public Advisory", key="public_entry", type="primary",
+                     use_container_width=True):
+        st.switch_page(PUBLIC_PAGE)
 
     st.markdown(
         "<div style='text-align:center;padding:12px 0 20px'>"

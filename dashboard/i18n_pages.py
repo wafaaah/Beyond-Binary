@@ -185,3 +185,10 @@ PHRASES.update({
         "নির্দিষ্ট ডেমো অ্যাকাউন্ট; এটি পূর্ণ নিরাপত্তা ব্যবস্থা নয়। জনসাধারণের পরামর্শ পাতা সবার জন্য খোলা।",
     "Demo sign-in, not production security": "ডেমো লগইন, পূর্ণ নিরাপত্তা ব্যবস্থা নয়",
 })
+
+PHRASES.update({
+    "Are you a member of the public?": "আপনি কি সাধারণ জনগণ?",
+    "See the dengue risk of your ward and health advice. No login needed.":
+        "আপনার ওয়ার্ডের ডেঙ্গু ঝুঁকি ও স্বাস্থ্য পরামর্শ দেখুন। লগইন লাগবে না।",
+    "Open Public Advisory": "জনসাধারণের পরামর্শ দেখুন",
+})
