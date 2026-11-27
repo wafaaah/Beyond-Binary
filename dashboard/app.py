@@ -19,6 +19,7 @@ from mock_data import (
 )
 
 from style import load_css
+from i18n import enable, is_bangla, t
 
 from components import (
     render_header,
@@ -132,12 +133,23 @@ def forecast_strip(fdf, selected_ward):
             )
             line2 = ""
 
+        heading = f"{int(weeks)}-WEEK FORECAST"
+        if is_bangla():
+            heading = f"{int(weeks)} সপ্তাহ পরের পূর্বাভাস"
+            if selected_ward == "All Wards":
+                line1 = (f"{len(group)}টি ওয়ার্ডের {alert_count}টি বেশি বা অতি ঝুঁকিতে "
+                         f"&middot; সম্ভাব্য রোগী {cases_text}")
+                line2 = (f"সর্বোচ্চ: {top['ward_id']} "
+                         f"({top['predicted_cases']:.2f})")
+            else:
+                line1 = f"{selected_ward} &middot; সম্ভাব্য রোগী {cases_text}"
+
         col.markdown(
             html(
                 f"""
                 <div class="fc-card" style="border-left:6px solid {color};">
-                    <div class="fc-label">{int(weeks)}-WEEK FORECAST</div>
-                    <div class="fc-risk" style="color:{color};">{worst}</div>
+                    <div class="fc-label">{heading}</div>
+                    <div class="fc-risk" style="color:{color};">{t(worst)}</div>
                     <div class="fc-line">{line1}</div>
                     <div class="fc-line fc-muted">{line2}</div>
                 </div>
@@ -157,6 +169,10 @@ def forecast_strip(fdf, selected_ward):
                 + caption
             )
 
+    if is_bangla():
+        caption = caption.replace("Forecast origin", "পূর্বাভাসের ভিত্তি তারিখ").replace(
+            "Experimental model estimates, not clinically validated.",
+            t("Experimental model estimates, not clinically validated."))
     st.caption(caption)
 
 
@@ -263,28 +279,26 @@ def render_seasonal_intelligence(
     else:
         season_status = "Outside historical peak months"
 
-    st.markdown("## Seasonal Dengue Intelligence")
+    st.markdown('## ' + t('Seasonal Dengue Intelligence'))
 
     with st.container(border=True):
         season_col1, season_col2 = st.columns([1.2, 1])
 
         with season_col1:
-            st.caption("HISTORICAL PEAK SEASON")
-            st.markdown(f"### {peak_month_text}")
+            st.caption(t('HISTORICAL PEAK SEASON'))
+            st.markdown(f"### {t(peak_month_text)}")
             st.write(
-                "Peak months calculated from unique actual observations "
-                "in the historical test dataset."
+                t('Peak months calculated from unique actual observations in the historical test dataset.')
             )
 
         with season_col2:
-            st.caption("FORECAST SEASON CONTEXT")
-            st.markdown(f"### {season_status}")
-            st.write(f"Forecast target months: {forecast_month_text}")
+            st.caption(t('FORECAST SEASON CONTEXT'))
+            st.markdown(f"### {t(season_status)}")
+            st.write(f"{'পূর্বাভাসের মাস' if is_bangla() else 'Forecast target months'}: {t(forecast_month_text)}")
 
         if peak_months and not monthly_cases.empty:
             st.caption(
-                "Peak-month ranking is based on aggregated actual cases "
-                "for the selected city/ward in the historical test period."
+                t('Peak-month ranking is based on aggregated actual cases for the selected city/ward in the historical test period.')
             )
         else:
             st.warning(
@@ -322,8 +336,7 @@ def render_seasonal_intelligence(
             )
 
         st.caption(
-            "Historical seasonality is calculated from actual test observations. "
-            "Forecasts are experimental model estimates, not confirmed cases."
+            t('Historical seasonality is calculated from actual test observations. Forecasts are experimental model estimates, not confirmed cases.')
         )
 
 
@@ -344,6 +357,7 @@ st.set_page_config(
 # ============================================================
 
 st.markdown(load_css(), unsafe_allow_html=True)
+enable(in_sidebar=False)
 
 st.markdown(
     html(
@@ -551,9 +565,9 @@ except Exception as error:
 # SIDEBAR
 # ============================================================
 
-st.sidebar.title("Layers")
-st.sidebar.caption("DENGUE SURVEILLANCE CONTROLS")
-st.sidebar.markdown("### Location")
+st.sidebar.title(t('Layers'))
+st.sidebar.caption(t('DENGUE SURVEILLANCE CONTROLS'))
+st.sidebar.markdown('### ' + t('Location'))
 
 cities = sorted(df["city"].dropna().unique().tolist())
 if not cities:
@@ -563,9 +577,10 @@ if not cities:
 default_city = cities.index("Chattogram") if "Chattogram" in cities else 0
 
 city = st.sidebar.selectbox(
-    "Select City",
+    t('Select City'),
     cities,
     index=default_city,
+    format_func=t,
 )
 
 
@@ -577,8 +592,9 @@ city_data = df[df["city"] == city]
 wards = sorted(city_data["ward_id"].dropna().unique().tolist())
 
 selected_ward = st.sidebar.selectbox(
-    "Administrative Level / Ward",
+    t('Administrative Level / Ward'),
     ["All Wards"] + wards,
+    format_func=t,
 )
 
 
@@ -587,7 +603,7 @@ selected_ward = st.sidebar.selectbox(
 # ============================================================
 
 st.sidebar.divider()
-st.sidebar.markdown("### Historical Period")
+st.sidebar.markdown('### ' + t('Historical Period'))
 
 min_date = df["date"].min().date()
 max_date = df["date"].max().date()
@@ -600,7 +616,7 @@ date_options = [
     "Custom Range",
 ]
 
-period = st.sidebar.selectbox("Select Period", date_options)
+period = st.sidebar.selectbox(t('Select Period'), date_options, format_func=t)
 
 if period == "All Available Data":
     start_date = min_date
@@ -625,7 +641,7 @@ elif period == "Last 3 Months":
     end_date = max_date
 else:
     selected_dates = st.sidebar.date_input(
-        "Choose date range",
+        t('Choose date range'),
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
@@ -644,8 +660,8 @@ else:
         end_date = selected_dates
 
 st.sidebar.divider()
-st.sidebar.caption("Source: Provided Bangladesh dengue dataset")
-st.sidebar.caption("Historical observations only.")
+st.sidebar.caption(t('Source: Provided Bangladesh dengue dataset'))
+st.sidebar.caption(t('Historical observations only.'))
 
 
 # ============================================================
@@ -686,9 +702,9 @@ ward_forecasts = get_ward_forecasts(
 render_header()
 
 st.markdown(
-    """
+    f"""
     <div class="dashboard-subtitle">
-        WARD RISK INTELLIGENCE SYSTEM | BANGLADESH
+        {t("WARD RISK INTELLIGENCE SYSTEM | BANGLADESH")}
     </div>
     """,
     unsafe_allow_html=True,
@@ -701,13 +717,13 @@ render_data_notice()
 # SURVEILLANCE OVERVIEW + SUMMARY METRICS
 # ============================================================
 
-st.markdown("## Surveillance Overview")
+st.markdown('## ' + t('Surveillance Overview'))
 st.caption(
-    f"Monitoring area: {city} | "
-    f"Administrative level: {selected_ward}"
+    f"{'পর্যবেক্ষণ এলাকা' if is_bangla() else 'Monitoring area'}: {t(city)} | "
+    f"{'ওয়ার্ড' if is_bangla() else 'Administrative level'}: {t(selected_ward)}"
 )
 st.caption(
-    f"Historical reporting period: {start_date} to {end_date}"
+    f"{'তথ্যের সময়কাল' if is_bangla() else 'Historical reporting period'}: {start_date} → {end_date}"
 )
 
 summary = get_summary(filtered_df)
@@ -716,22 +732,22 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.metric(
-        "Historical Dengue Cases",
+        t('Historical Dengue Cases'),
         f'{summary["total_cases"]:,}',
     )
 
 with col2:
-    st.metric("Wards Represented", summary["total_wards"])
+    st.metric(t('Wards Represented'), summary["total_wards"])
 
 with col3:
     st.metric(
-        "Average Rainfall",
+        t('Average Rainfall'),
         f'{summary["avg_rainfall"]:.1f} mm',
     )
 
 with col4:
     st.metric(
-        "Average Temperature",
+        t('Average Temperature'),
         f'{summary["avg_temperature"]:.1f} °C',
     )
 
@@ -755,7 +771,7 @@ st.divider()
 # HERO: FORECAST STRIP
 # ============================================================
 
-st.markdown("### Dengue Forecast Outlook")
+st.markdown('### ' + t('Dengue Forecast Outlook'))
 forecast_strip(ward_forecasts, selected_ward)
 st.divider()
 
@@ -773,12 +789,12 @@ st.divider()
     tab_ranking,
 ) = st.tabs(
     [
-        "Overview",
-        "Forecast",
-        "3D Risk Map",
-        "Backtesting",
-        "Action Plan",
-        "Ward Ranking",
+        t('Overview'),
+        t('Forecast'),
+        t('3D Risk Map'),
+        t('Backtesting'),
+        t('Action Plan'),
+        t('Ward Ranking'),
     ]
 )
 
@@ -792,14 +808,14 @@ with tab_overview:
 
     with left_col:
         cases_tab, weather_tab, indicators_tab = st.tabs(
-            ["Cases", "Weather", "Ward Indicators"]
+            [t('Cases'), t('Weather'), t('Ward Indicators')]
         )
 
         # HISTORICAL CASES
         with cases_tab:
             render_section_title(
-                "Historical Dengue Cases",
-                "Monthly aggregation of available weekly observations.",
+                t('Historical Dengue Cases'),
+                t('Monthly aggregation of available weekly observations.'),
             )
 
             monthly_df = get_monthly_cases(filtered_df)
@@ -828,8 +844,8 @@ with tab_overview:
         # WEATHER ANALYSIS
         with weather_tab:
             render_section_title(
-                "Weather Analysis",
-                "Historical rainfall, temperature and humidity.",
+                t('Weather Analysis'),
+                t('Historical rainfall, temperature and humidity.'),
             )
 
             weather_data = get_weather_data(filtered_df)
@@ -884,8 +900,8 @@ with tab_overview:
         # WARD INDICATORS
         with indicators_tab:
             render_section_title(
-                "Environmental Vulnerability",
-                "Actual ward-level characteristics from the dataset.",
+                t('Environmental Vulnerability'),
+                t('Actual ward-level characteristics from the dataset.'),
             )
 
             profile = get_ward_profile(filtered_df)
@@ -898,24 +914,24 @@ with tab_overview:
 
     # RIGHT: LOCATION + WEATHER SUMMARY
     with right_col:
-        st.markdown("### Selected Location")
+        st.markdown('### ' + t('Selected Location'))
         st.markdown(f"**City:** {city}")
         st.markdown(f"**Ward:** {selected_ward}")
         st.markdown(f"**Observations:** {len(filtered_df):,}")
 
         st.divider()
-        st.markdown("### Historical Weather Summary")
+        st.markdown('### ' + t('Historical Weather Summary'))
 
         st.metric(
-            "Average Humidity",
+            t('Average Humidity'),
             f'{summary["avg_humidity"]:.1f}%',
         )
         st.metric(
-            "Average Rainfall",
+            t('Average Rainfall'),
             f'{summary["avg_rainfall"]:.1f} mm',
         )
         st.metric(
-            "Historical Records",
+            t('Historical Records'),
             f'{summary["total_records"]:,}',
         )
 
@@ -926,8 +942,8 @@ with tab_overview:
 
 with tab_forecast:
     render_section_title(
-        "Ward-Level Forecast",
-        "Predicted weekly dengue cases and risk level for each ward.",
+        t('Ward-Level Forecast'),
+        t('Predicted weekly dengue cases and risk level for each ward.'),
     )
 
     if ward_forecasts.empty:
@@ -941,7 +957,7 @@ with tab_forecast:
             st.info("No valid forecast horizon is available.")
         else:
             fc_horizon = st.selectbox(
-                "Forecast Window",
+                t('Forecast Window'),
                 fc_horizons,
                 format_func=lambda x: f"{int(x)}-Week Forecast",
                 key="forecast_horizon",
@@ -1037,8 +1053,8 @@ with tab_map:
 
 with tab_backtest:
     render_section_title(
-        "Historical Model Backtesting",
-        "Evaluation of model predictions on historical test data.",
+        t('Historical Model Backtesting'),
+        t('Evaluation of model predictions on historical test data.'),
     )
 
     if backtest_df.empty:
@@ -1341,8 +1357,8 @@ with tab_backtest:
 
 with tab_action:
     render_section_title(
-        "Public Health Action Plan",
-        "Suggested actions based on current model forecast risk.",
+        t('Public Health Action Plan'),
+        t('Suggested actions based on current model forecast risk.'),
     )
 
     if not ward_forecasts.empty:
@@ -1413,7 +1429,7 @@ with tab_action:
 
 with tab_ranking:
     render_section_title(
-        "Ward Intelligence Ranking",
+        t('Ward Intelligence Ranking'),
         "Ranking by historical dengue case count in the selected period, "
         "not by predicted outbreak risk.",
     )

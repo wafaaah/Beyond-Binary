@@ -1,6 +1,8 @@
 
 import streamlit as st
 
+from i18n import t
+
 
 # --------------------------------
 # RISK COLORS
@@ -44,11 +46,11 @@ def render_header():
 
 def render_data_notice():
 
-    st.info(
+    st.info(t(
         "Historical dengue data is used for surveillance analysis. "
         "ML forecasts are experimental early-warning estimates and "
         "should not be treated as confirmed outbreak predictions."
-    )
+    ))
 
 
 # --------------------------------

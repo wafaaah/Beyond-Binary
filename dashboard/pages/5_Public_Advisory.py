@@ -14,7 +14,7 @@ from shared import (  # noqa: E402
 )
 
 st.set_page_config(page_title="জনসাধারণের পরামর্শ", layout="wide")
-apply_style()
+apply_style(bangla_page=True)
 
 RISK_BN = {
     "Low": ("কম ঝুঁকি", "সতর্ক থাকুন এবং ঘরের আশেপাশে পানি জমতে দেবেন না।"),
