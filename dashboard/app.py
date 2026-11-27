@@ -44,10 +44,10 @@ RISK_ORDER = ["Critical", "High", "Medium", "Low"]
 RISK_LEVELS = ["Low", "Medium", "High", "Critical"]
 
 RISK_COLORS = {
-    "Low": "#35C98A",
-    "Medium": "#E7B84B",
-    "High": "#F08B43",
-    "Critical": "#EF5361",
+    "Low": "#A9BC5F",
+    "Medium": "#F5C84C",
+    "High": "#F2762E",
+    "Critical": "#E5484D",
 }
 
 
@@ -76,7 +76,7 @@ def style_fig(fig, height=340):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=10, r=10, t=40, b=10),
-        font=dict(color="#C9D6D2"),
+        font=dict(color="#D9D2C7"),
         xaxis=dict(gridcolor="rgba(255,255,255,0.06)"),
         yaxis=dict(gridcolor="rgba(255,255,255,0.06)"),
     )
@@ -366,10 +366,10 @@ st.markdown(
             padding: 16px 20px;
             margin-bottom: 8px;
         }
-        .fc-label {color: #9fb3ad; font-size: 12px; letter-spacing: 1px;}
+        .fc-label {color: #b5ada1; font-size: 12px; letter-spacing: 1px;}
         .fc-risk {font-size: 30px; font-weight: 700; line-height: 1.3;}
-        .fc-line {color: #c9d6d2; font-size: 13px;}
-        .fc-muted {color: #8fa39d;}
+        .fc-line {color: #d9d2c7; font-size: 13px;}
+        .fc-muted {color: #a9a39a;}
         </style>
         """
     ),
@@ -813,7 +813,7 @@ with tab_overview:
                         "month": "Month",
                         "dengue_cases": "Reported Cases",
                     },
-                    color_discrete_sequence=["#20A878"],
+                    color_discrete_sequence=["#F2A33A"],
                 )
                 fig.update_traces(line=dict(width=2.5))
                 fig.update_layout(showlegend=False)
@@ -840,7 +840,7 @@ with tab_overview:
                     x="week",
                     y="rainfall_mm",
                     title="Weekly Rainfall",
-                    color_discrete_sequence=["#249DBB"],
+                    color_discrete_sequence=["#F5C84C"],
                     labels={
                         "week": "Date",
                         "rainfall_mm": "Rainfall (mm)",
@@ -859,7 +859,7 @@ with tab_overview:
                         x="week",
                         y="avg_temp_c",
                         title="Average Temperature",
-                        color_discrete_sequence=["#F08B43"],
+                        color_discrete_sequence=["#F2762E"],
                     )
                     st.plotly_chart(
                         style_fig(temp_fig, 280),
@@ -872,7 +872,7 @@ with tab_overview:
                         x="week",
                         y="relative_humidity_pct",
                         title="Relative Humidity",
-                        color_discrete_sequence=["#8E9BFF"],
+                        color_discrete_sequence=["#E58A6B"],
                     )
                     st.plotly_chart(
                         style_fig(humidity_fig, 280),
@@ -1185,15 +1185,15 @@ with tab_backtest:
                 x=line_df["target_date"],
                 y=line_df["actual_cases"],
                 name="Actual",
-                line=dict(color="#C9D6D2", width=2),
+                line=dict(color="#D9D2C7", width=2),
             )
             avp_fig.add_scatter(
                 x=line_df["target_date"],
                 y=line_df["predicted_cases"],
                 name="Predicted",
-                line=dict(color="#20A878", width=3),
+                line=dict(color="#F2A33A", width=3),
                 fill="tozeroy",
-                fillcolor="rgba(32,168,120,0.12)",
+                fillcolor="rgba(242,163,58,0.14)",
             )
 
             st.plotly_chart(
@@ -1216,9 +1216,9 @@ with tab_backtest:
                     pivot,
                     aspect="auto",
                     color_continuous_scale=[
-                        "#10201c",
-                        "#E7B84B",
-                        "#EF5361",
+                        "#1F1F23",
+                        "#F5C84C",
+                        "#E5484D",
                     ],
                     labels=dict(color="Predicted cases"),
                 )

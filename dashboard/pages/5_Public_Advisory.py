@@ -107,9 +107,9 @@ def show_copilot(forecasts):
 
 st.markdown(
     "<style>.stButton>button{border-radius:14px;min-height:52px;"
-    "border:1px solid rgba(53,194,176,.55);"
-    "background:linear-gradient(120deg,rgba(15,124,134,.22),rgba(53,194,176,.08))}"
-    ".stButton>button:hover{border-color:#35C2B0}</style>",
+    "border:1px solid rgba(242,163,58,.55);"
+    "background:linear-gradient(120deg,rgba(242,118,46,.20),rgba(242,163,58,.06))}"
+    ".stButton>button:hover{border-color:#F2A33A}</style>",
     unsafe_allow_html=True,
 )
 st.write("")

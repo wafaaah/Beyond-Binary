@@ -11,12 +11,13 @@ if str(ROOT) not in sys.path:
 
 from ml.allocation import forecast, load_data, peak_week  # noqa: E402
 from ml.simulator import simulation_weeks  # noqa: E402
+from theme import CSS  # noqa: E402
 
 RISK_COLORS = {
-    "Low": "#35C98A",
-    "Medium": "#E7B84B",
-    "High": "#F08B43",
-    "Critical": "#EF5361",
+    "Low": "#A9BC5F",
+    "Medium": "#F5C84C",
+    "High": "#F2762E",
+    "Critical": "#E5484D",
 }
 
 
@@ -71,12 +72,7 @@ def scenario_controls():
 
 
 def apply_style():
-    st.markdown(
-        "<style>[data-testid='stMetric']{background:rgba(128,128,128,.10);"
-        "border:1px solid rgba(128,128,128,.25);border-radius:14px;"
-        "padding:14px 16px}</style>",
-        unsafe_allow_html=True,
-    )
+    st.markdown(CSS, unsafe_allow_html=True)
 
 
 def risk_style(value):
