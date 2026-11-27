@@ -14,7 +14,7 @@ def risk_color(risk_level):
         "Critical": "#E5484D"
     }
 
-    return colors.get(risk_level, "#A9A39A")
+    return colors.get(risk_level, "#A687BC")
 
 
 # --------------------------------
@@ -29,7 +29,7 @@ def render_header():
             <h1 style="margin-bottom:0;">
                 🦟 DengueWatch
             </h1>
-            <p style="color:#F2A33A; margin-top:5px;">
+            <p style="color:#F4B647; margin-top:5px;">
                 Beyond-Binary | AI for Urban Dengue Outbreak
             </p>
         </div>
@@ -118,12 +118,12 @@ def render_risk_card(risk_level, risk_score):
     st.markdown(
         f"""
         <div style="
-            background:#222226;
+            background:#2A1837;
             border:1px solid {color};
             border-radius:14px;
             padding:20px;
         ">
-            <p style="color:#A9A39A;margin:0;">
+            <p style="color:#A687BC;margin:0;">
                 Risk Assessment
             </p>
 
@@ -131,7 +131,7 @@ def render_risk_card(risk_level, risk_score):
                 {risk_level}
             </h2>
 
-            <p style="color:#F1ECE3;margin:0;">
+            <p style="color:#F6F0FA;margin:0;">
                 Risk Score: {risk_score}/100
             </p>
         </div>
@@ -187,11 +187,11 @@ def render_demo_notice():
     st.markdown(
         """
         <div style="
-            background:#222226;
+            background:#2A1837;
             border:1px solid #F5C84C;
             border-radius:10px;
             padding:12px;
-            color:#F1ECE3;
+            color:#F6F0FA;
         ">
             ⚠️ DEMO MODE — Values shown may include mock data
             and are not confirmed dengue predictions.
@@ -213,7 +213,7 @@ def render_footer():
 
         <div style="
             text-align:center;
-            color:#A9A39A;
+            color:#A687BC;
             padding:10px;
         ">
             DengueWatch | Beyond-Binary | EDU AI Engineering Hackathon 2026

@@ -76,7 +76,7 @@ def style_fig(fig, height=340):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=10, r=10, t=40, b=10),
-        font=dict(color="#D9D2C7"),
+        font=dict(color="#D2C3DD"),
         xaxis=dict(gridcolor="rgba(255,255,255,0.06)"),
         yaxis=dict(gridcolor="rgba(255,255,255,0.06)"),
     )
@@ -366,10 +366,10 @@ st.markdown(
             padding: 16px 20px;
             margin-bottom: 8px;
         }
-        .fc-label {color: #b5ada1; font-size: 12px; letter-spacing: 1px;}
+        .fc-label {color: #AF93C3; font-size: 12px; letter-spacing: 1px;}
         .fc-risk {font-size: 30px; font-weight: 700; line-height: 1.3;}
-        .fc-line {color: #d9d2c7; font-size: 13px;}
-        .fc-muted {color: #a9a39a;}
+        .fc-line {color: #D2C3DD; font-size: 13px;}
+        .fc-muted {color: #A687BC;}
         </style>
         """
     ),
@@ -813,7 +813,7 @@ with tab_overview:
                         "month": "Month",
                         "dengue_cases": "Reported Cases",
                     },
-                    color_discrete_sequence=["#F2A33A"],
+                    color_discrete_sequence=["#F4B647"],
                 )
                 fig.update_traces(line=dict(width=2.5))
                 fig.update_layout(showlegend=False)
@@ -1185,15 +1185,15 @@ with tab_backtest:
                 x=line_df["target_date"],
                 y=line_df["actual_cases"],
                 name="Actual",
-                line=dict(color="#D9D2C7", width=2),
+                line=dict(color="#D2C3DD", width=2),
             )
             avp_fig.add_scatter(
                 x=line_df["target_date"],
                 y=line_df["predicted_cases"],
                 name="Predicted",
-                line=dict(color="#F2A33A", width=3),
+                line=dict(color="#F4B647", width=3),
                 fill="tozeroy",
-                fillcolor="rgba(242,163,58,0.14)",
+                fillcolor="rgba(244,182,71,0.14)",
             )
 
             st.plotly_chart(
@@ -1216,7 +1216,7 @@ with tab_backtest:
                     pivot,
                     aspect="auto",
                     color_continuous_scale=[
-                        "#1F1F23",
+                        "#271633",
                         "#F5C84C",
                         "#E5484D",
                     ],

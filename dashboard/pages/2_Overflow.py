@@ -23,7 +23,7 @@ from theme import (  # noqa: E402
     ward_board,
 )
 
-GREY = "#77727C"
+GREY = "#8458A4"
 
 st.set_page_config(page_title="Overflow Routing", layout="wide")
 apply_style()

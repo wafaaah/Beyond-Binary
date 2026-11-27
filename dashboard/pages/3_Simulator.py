@@ -19,7 +19,7 @@ from ml.simulator import (  # noqa: E402
     prepare, rank_roi, simulate,
 )
 
-GREY = "#77727C"
+GREY = "#8458A4"
 
 st.set_page_config(page_title="What-If Simulator", layout="wide")
 apply_style()

@@ -115,7 +115,7 @@ with left:
     figure.add_trace(go.Scatter(
         x=history.index, y=history.values, name="Actual cases", mode="lines",
         line={"color": AMBER, "width": 3}, fill="tozeroy",
-        fillcolor="rgba(242,163,58,.14)",
+        fillcolor="rgba(244,182,71,.14)",
     ))
     figure.add_trace(go.Scatter(
         x=[history.index[-1]] + [f["target_date"].iloc[0] for f in future],
@@ -145,7 +145,7 @@ with left:
         cities, x="city", barmode="group",
         y=["saline_bags_needed", "saline_bags_allocated"],
         labels={"value": "Bags", "city": "", "variable": ""},
-        color_discrete_sequence=["#6A5A3E", AMBER],
+        color_discrete_sequence=["#5E3F74", AMBER],
     )
     style_figure(chart)
     chart.update_layout(title="Saline: required vs allocated")
