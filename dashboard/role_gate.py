@@ -143,11 +143,11 @@ def require_login():
         # public entry comes first: no account needed
         text, action = st.columns([3, 1])
         text.markdown(
-            "<div style='border:1px solid #6E8436;border-left:6px solid #A9BC5F;border-radius:14px;"
-            "background:#222A1C;padding:14px 18px'>"
-            "<div style='font-size:19px;font-weight:800;color:#F4B647'>&#128226; Are you a member "
+            "<div style='border:1px solid #FFD98A;border-left:6px solid #C9861A;border-radius:14px;"
+            "background:linear-gradient(100deg,#F8C95C,#EDA43A);padding:14px 18px'>"
+            "<div style='font-size:19px;font-weight:800;color:#24102F'>&#128226; Are you a member "
             "of the public?</div>"
-            "<div style='font-size:14px;color:#D2C3DD'>See the dengue risk of your ward and health "
+            "<div style='font-size:14px;font-weight:600;color:#3A1D45'>See the dengue risk of your ward and health "
             "advice. No login needed.</div></div>",
             unsafe_allow_html=True,
         )
