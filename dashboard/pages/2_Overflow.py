@@ -4,39 +4,27 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+DASHBOARD = Path(__file__).resolve().parents[1]
+if str(DASHBOARD) not in sys.path:
+    sys.path.insert(0, str(DASHBOARD))
 
+from shared import (  # noqa: E402
+    apply_style, cached_data, cached_forecast, scenario_controls,
+)
 from ml.allocation import (  # noqa: E402
-    add_demand, available_weeks, forecast, load_data, peak_week,
+    add_demand,
 )
 from ml.routing import (  # noqa: E402
     city_bed_summary, estimate_capacity, route_overflow,
 )
 
 st.set_page_config(page_title="Overflow Routing", layout="wide")
+apply_style()
+week, horizon, stock, crews = scenario_controls()
 st.title("Hospital Surge and Overflow Routing")
 
 
-@st.cache_data
-def cached_data():
-    return load_data()
-
-
-@st.cache_data
-def cached_forecast(week, horizon):
-    return forecast(cached_data(), week, horizon)
-
-
 data = cached_data()
-horizon = st.sidebar.radio("Forecast horizon (weeks)", [2, 3, 4], horizontal=True)
-weeks = [pd.Timestamp(w).date() for w in available_weeks(data, horizon)]
-week = st.sidebar.selectbox(
-    "Forecast origin week",
-    weeks,
-    index=weeks.index(pd.Timestamp(peak_week(data, horizon)).date()),
-)
 multiplier = st.sidebar.slider("Bed capacity scenario", 0.5, 2.0, 1.0, 0.1)
 
 demand = add_demand(cached_forecast(week, horizon))

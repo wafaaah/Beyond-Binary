@@ -4,22 +4,22 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+DASHBOARD = Path(__file__).resolve().parents[1]
+if str(DASHBOARD) not in sys.path:
+    sys.path.insert(0, str(DASHBOARD))
 
+from shared import (  # noqa: E402
+    apply_style, cached_data, scenario_controls,
+)
 from ml.allocation import load_data, peak_week  # noqa: E402
 from ml.simulator import (  # noqa: E402
-    prepare, rank_roi, simulate, simulation_weeks,
+    prepare, rank_roi, simulate,
 )
 
 st.set_page_config(page_title="What-If Simulator", layout="wide")
+apply_style()
+week, horizon, stock, crews = scenario_controls()
 st.title("What-If Vector Control Simulator")
-
-
-@st.cache_data
-def cached_data():
-    return load_data()
 
 
 @st.cache_resource
@@ -28,13 +28,7 @@ def cached_prepare(week):
 
 
 data = cached_data()
-weeks = [pd.Timestamp(w).date() for w in simulation_weeks(data)]
-default = pd.Timestamp(peak_week(data)).date()
-week = st.sidebar.selectbox(
-    "Forecast origin week", weeks,
-    index=weeks.index(default) if default in weeks else len(weeks) - 1,
-)
-limit = st.sidebar.slider("Available crews", 1, 60, 20)
+limit = crews
 effect = st.sidebar.slider("Assumed effect per crew (%)", 5, 50, 25, 5) / 100
 
 rows, models = cached_prepare(week)
@@ -48,18 +42,18 @@ top = ranking.loc[ranking["cases_prevented"] > 0, "ward_id"].head(5).tolist()
 selected = st.multiselect(
     "Selected wards", sorted(rows.index), default=top[:min(5, limit)]
 )
-crews = {
+plan = {
     ward: st.number_input(f"Crews for {ward}", 0, 5, 1, key=f"crew_{ward}")
     for ward in selected
 }
-used = sum(crews.values())
+used = sum(plan.values())
 
 if used > limit:
     st.error(f"{used} crews selected but only {limit} available.")
 elif used == 0:
     st.info("Select wards and assign at least one crew.")
 else:
-    result = simulate(rows, models, crews, effect)
+    result = simulate(rows, models, plan, effect)
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Crews used", f"{used} / {limit}")
     c2.metric("Cases prevented", f"{result['cases_prevented'].sum():.1f}")
