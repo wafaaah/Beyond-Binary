@@ -1,0 +1,119 @@
+DENGUE CRITICAL DSCC_Ward_04 wk 26-Aug-2024. Pred 13.0. Saline:31/31 Kits:15/15 Beds:4/4 (got/need). Teams: TEAM-01. DEFICIT: 2 crews
+
+DENGUE CRITICAL DNCC_Ward_12 wk 26-Aug-2024. Pred 13.1. Saline:31/31 Kits:15/15 Beds:4/4 (got/need). Teams: TEAM-02. DEFICIT: 2 crews
+
+DENGUE CRITICAL CCC_Ward_03 wk 26-Aug-2024. Pred 13.1. Saline:31/31 Kits:15/15 Beds:4/4 (got/need). Teams: TEAM-03. DEFICIT: 2 crews
+
+DENGUE CRITICAL CCC_Ward_01 wk 26-Aug-2024. Pred 12.6. Saline:30/30 Kits:15/15 Beds:4/4 (got/need). Teams: TEAM-04. DEFICIT: 2 crews
+
+DENGUE CRITICAL DNCC_Ward_18 wk 26-Aug-2024. Pred 12.2. Saline:29/29 Kits:14/14 Beds:4/4 (got/need). Teams: TEAM-05. DEFICIT: 2 crews
+
+DENGUE CRITICAL DSCC_Ward_06 wk 26-Aug-2024. Pred 12.6. Saline:30/30 Kits:15/15 Beds:4/4 (got/need). Teams: TEAM-06. DEFICIT: 2 crews
+
+DENGUE CRITICAL GCC_Ward_03 wk 26-Aug-2024. Pred 12.1. Saline:29/29 Kits:14/14 Beds:4/4 (got/need). Teams: TEAM-07. DEFICIT: 2 crews
+
+DENGUE CRITICAL DSCC_Ward_10 wk 26-Aug-2024. Pred 12.8. Saline:30/30 Kits:15/15 Beds:4/4 (got/need). Teams: TEAM-08. DEFICIT: 2 crews
+
+DENGUE CRITICAL GCC_Ward_05 wk 26-Aug-2024. Pred 10.1. Saline:24/24 Kits:12/12 Beds:3/3 (got/need). Teams: TEAM-09. DEFICIT: 2 crews
+
+DENGUE CRITICAL DSCC_Ward_19 wk 26-Aug-2024. Pred 11.9. Saline:29/29 Kits:14/14 Beds:4/4 (got/need). Teams: TEAM-10. DEFICIT: 2 crews
+
+DENGUE CRITICAL DNCC_Ward_19 wk 26-Aug-2024. Pred 12.2. Saline:29/29 Kits:14/14 Beds:4/4 (got/need). Teams: TEAM-11. DEFICIT: 2 crews
+
+DENGUE CRITICAL DSCC_Ward_12 wk 26-Aug-2024. Pred 11.6. Saline:28/28 Kits:14/14 Beds:3/3 (got/need). Teams: TEAM-12. DEFICIT: 2 crews
+
+DENGUE CRITICAL GCC_Ward_02 wk 26-Aug-2024. Pred 12.2. Saline:29/29 Kits:14/14 Beds:4/4 (got/need). Teams: TEAM-13. DEFICIT: 2 crews
+
+DENGUE CRITICAL DNCC_Ward_09 wk 26-Aug-2024. Pred 12.0. Saline:29/29 Kits:14/14 Beds:4/4 (got/need). Teams: TEAM-14. DEFICIT: 2 crews
+
+DENGUE CRITICAL NCC_Ward_05 wk 26-Aug-2024. Pred 12.0. Saline:29/29 Kits:14/14 Beds:4/4 (got/need). Teams: TEAM-15. DEFICIT: 2 crews
+
+DENGUE CRITICAL DNCC_Ward_01 wk 26-Aug-2024. Pred 11.3. Saline:27/27 Kits:13/13 Beds:3/3 (got/need). Teams: TEAM-16. DEFICIT: 2 crews
+
+DENGUE CRITICAL CCC_Ward_07 wk 26-Aug-2024. Pred 10.9. Saline:26/26 Kits:13/13 Beds:3/3 (got/need). Teams: TEAM-17. DEFICIT: 2 crews
+
+DENGUE CRITICAL DSCC_Ward_20 wk 26-Aug-2024. Pred 10.3. Saline:25/25 Kits:12/12 Beds:3/3 (got/need). Teams: TEAM-18. DEFICIT: 2 crews
+
+DENGUE HIGH GCC_Ward_01 wk 26-Aug-2024. Pred 9.5. Saline:5/23 Kits:2/11 Beds:0/3 (got/need). Teams: TEAM-19. DEFICIT: 18 saline bags, 9 diagnostic kits, 3 beds, 1 crews
+
+DENGUE HIGH NCC_Ward_01 wk 26-Aug-2024. Pred 9.5. Saline:23/23 Kits:11/11 Beds:3/3 (got/need). Teams: TEAM-20. DEFICIT: 1 crews
+
+DENGUE HIGH DNCC_Ward_05 wk 26-Aug-2024. Pred 8.8. Saline:21/21 Kits:10/10 Beds:3/3 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH GCC_Ward_04 wk 26-Aug-2024. Pred 8.6. Saline:0/20 Kits:0/10 Beds:0/3 (got/need). Teams: none assigned. DEFICIT: 20 saline bags, 10 diagnostic kits, 3 beds, 2 crews
+
+DENGUE HIGH DNCC_Ward_04 wk 26-Aug-2024. Pred 6.1. Saline:15/15 Kits:7/7 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DNCC_Ward_16 wk 26-Aug-2024. Pred 8.1. Saline:19/19 Kits:9/9 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH NCC_Ward_04 wk 26-Aug-2024. Pred 7.2. Saline:17/17 Kits:8/8 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DSCC_Ward_08 wk 26-Aug-2024. Pred 9.2. Saline:22/22 Kits:11/11 Beds:3/3 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DNCC_Ward_11 wk 26-Aug-2024. Pred 8.5. Saline:20/20 Kits:10/10 Beds:3/3 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DNCC_Ward_02 wk 26-Aug-2024. Pred 8.3. Saline:20/20 Kits:10/10 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DNCC_Ward_17 wk 26-Aug-2024. Pred 6.6. Saline:16/16 Kits:8/8 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DSCC_Ward_13 wk 26-Aug-2024. Pred 9.2. Saline:22/22 Kits:11/11 Beds:3/3 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DNCC_Ward_10 wk 26-Aug-2024. Pred 9.9. Saline:24/24 Kits:12/12 Beds:3/3 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH CCC_Ward_04 wk 26-Aug-2024. Pred 9.1. Saline:22/22 Kits:11/11 Beds:3/3 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH CCC_Ward_10 wk 26-Aug-2024. Pred 6.5. Saline:15/15 Kits:8/8 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DNCC_Ward_14 wk 26-Aug-2024. Pred 6.3. Saline:11/15 Kits:5/7 Beds:1/2 (got/need). Teams: none assigned. DEFICIT: 4 saline bags, 2 diagnostic kits, 1 beds, 2 crews
+
+DENGUE HIGH DNCC_Ward_07 wk 26-Aug-2024. Pred 7.3. Saline:0/17 Kits:0/8 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 17 saline bags, 8 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DSCC_Ward_01 wk 26-Aug-2024. Pred 6.4. Saline:15/15 Kits:7/7 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DSCC_Ward_07 wk 26-Aug-2024. Pred 5.3. Saline:13/13 Kits:6/6 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DSCC_Ward_02 wk 26-Aug-2024. Pred 6.6. Saline:16/16 Kits:8/8 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH CCC_Ward_06 wk 26-Aug-2024. Pred 7.6. Saline:16/18 Kits:8/9 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 saline bags, 1 diagnostic kits, 2 crews
+
+DENGUE HIGH DSCC_Ward_15 wk 26-Aug-2024. Pred 7.3. Saline:17/17 Kits:9/9 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DSCC_Ward_09 wk 26-Aug-2024. Pred 6.8. Saline:16/16 Kits:8/8 Beds:2/2 (got/need). Teams: none assigned. DEFICIT: 2 crews
+
+DENGUE HIGH DNCC_Ward_13 wk 26-Aug-2024. Pred 5.4. Saline:0/13 Kits:0/6 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 13 saline bags, 6 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH CCC_Ward_09 wk 26-Aug-2024. Pred 5.2. Saline:0/12 Kits:0/6 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 12 saline bags, 6 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH CCC_Ward_08 wk 26-Aug-2024. Pred 7.6. Saline:0/18 Kits:0/9 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 18 saline bags, 9 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DSCC_Ward_16 wk 26-Aug-2024. Pred 6.7. Saline:2/16 Kits:1/8 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 14 saline bags, 7 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DSCC_Ward_17 wk 26-Aug-2024. Pred 5.7. Saline:0/14 Kits:0/7 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 14 saline bags, 7 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DNCC_Ward_20 wk 26-Aug-2024. Pred 5.7. Saline:0/14 Kits:0/7 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 14 saline bags, 7 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DNCC_Ward_06 wk 26-Aug-2024. Pred 6.6. Saline:0/16 Kits:0/8 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 16 saline bags, 8 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DSCC_Ward_18 wk 26-Aug-2024. Pred 9.9. Saline:0/24 Kits:0/12 Beds:0/3 (got/need). Teams: none assigned. DEFICIT: 24 saline bags, 12 diagnostic kits, 3 beds, 2 crews
+
+DENGUE HIGH DSCC_Ward_03 wk 26-Aug-2024. Pred 10.0. Saline:0/24 Kits:0/12 Beds:0/3 (got/need). Teams: none assigned. DEFICIT: 24 saline bags, 12 diagnostic kits, 3 beds, 2 crews
+
+DENGUE HIGH DNCC_Ward_08 wk 26-Aug-2024. Pred 6.8. Saline:0/16 Kits:0/8 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 16 saline bags, 8 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH CCC_Ward_05 wk 26-Aug-2024. Pred 6.0. Saline:0/14 Kits:0/7 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 14 saline bags, 7 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DSCC_Ward_11 wk 26-Aug-2024. Pred 8.6. Saline:0/20 Kits:0/10 Beds:0/3 (got/need). Teams: none assigned. DEFICIT: 20 saline bags, 10 diagnostic kits, 3 beds, 2 crews
+
+DENGUE HIGH CCC_Ward_02 wk 26-Aug-2024. Pred 6.3. Saline:0/15 Kits:0/7 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 15 saline bags, 7 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DNCC_Ward_03 wk 26-Aug-2024. Pred 9.4. Saline:0/22 Kits:0/11 Beds:0/3 (got/need). Teams: none assigned. DEFICIT: 22 saline bags, 11 diagnostic kits, 3 beds, 2 crews
+
+DENGUE HIGH NCC_Ward_02 wk 26-Aug-2024. Pred 6.2. Saline:2/15 Kits:1/7 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 13 saline bags, 6 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DNCC_Ward_15 wk 26-Aug-2024. Pred 9.4. Saline:0/23 Kits:0/11 Beds:0/3 (got/need). Teams: none assigned. DEFICIT: 23 saline bags, 11 diagnostic kits, 3 beds, 2 crews
+
+DENGUE HIGH NCC_Ward_03 wk 26-Aug-2024. Pred 7.3. Saline:0/18 Kits:0/9 Beds:0/2 (got/need). Teams: none assigned. DEFICIT: 18 saline bags, 9 diagnostic kits, 2 beds, 2 crews
+
+DENGUE HIGH DSCC_Ward_05 wk 26-Aug-2024. Pred 8.8. Saline:0/21 Kits:0/10 Beds:0/3 (got/need). Teams: none assigned. DEFICIT: 21 saline bags, 10 diagnostic kits, 3 beds, 2 crews
+
+DENGUE MEDIUM DSCC_Ward_14 wk 26-Aug-2024. Pred 4.5. Saline:0/11 Kits:0/5 Beds:0/1 (got/need). Teams: none assigned. DEFICIT: 11 saline bags, 5 diagnostic kits, 1 beds, 1 crews
